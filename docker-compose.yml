@@ -5,6 +5,8 @@ services:
   db:
     image: postgres
     container_name: pg_carpooling
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: docker_carpooling
       POSTGRES_PASSWORD: docker_carpooling
