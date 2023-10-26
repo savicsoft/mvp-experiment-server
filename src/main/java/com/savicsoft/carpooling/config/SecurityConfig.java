@@ -37,9 +37,14 @@ import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
 
 import java.util.UUID;
 
-//To sign up
-//Send a POST request to {{URL}}/api/auth/signup with a JSON
-//{username, password, email}
+/*To sign up
+Send a POST request to {{URL}}/api/auth/signup with a JSON
+{username, password, email}
+To log in
+{{UR}}/login
+Or send a POST request to {{URL}}/api/auth/login with a JSON
+{username, password}
+*/
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -99,44 +104,7 @@ public class SecurityConfig {
 
         return http.build();
     }
- /*   @Autowired
-   // private GoogleTokenAuthenticationProvider googleTokenAuthenticationProvider;
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(cors->cors.disable())
-                .csrf(csrf->csrf.disable())
-                .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(form->form.disable())
-                .securityMatcher("/**")
-                .authorizeHttpRequests(
-                        registry->registry
-                                .requestMatchers("/api/authenticate").permitAll() // Permit all for Google token endpoint
-                                .anyRequest().authenticated()
-                )
-           //     .addFilterBefore(new GoogleTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-          //      .addFilterBefore(new JwtAuthenticationFilter(), GoogleTokenFilter.class);
-        return http.build();
-    } */
-/*    @Bean
-    @Order(2)
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .oauth2Login(Customizer.withDefaults())
-                ;
 
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    } */
  @Bean
  @Order(2)
  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
