@@ -145,6 +145,7 @@ public class SecurityConfig {
              .authorizeHttpRequests((authorize) -> authorize
                      .requestMatchers("/login").permitAll()
                      .requestMatchers("/api/auth/signin").permitAll()
+                     .requestMatchers("/api/auth/signup").permitAll()
                      .anyRequest().authenticated()
 
              )
