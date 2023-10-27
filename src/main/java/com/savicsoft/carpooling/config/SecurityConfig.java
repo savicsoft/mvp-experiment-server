@@ -50,8 +50,6 @@ Send a POST request to {{URL}}/api/auth/signup with a JSON
 {username, password, email}
 To log in
 {{UR}}/login
-Or send a POST request to {{URL}}/api/auth/login with a JSON
-{username, password}
 */
 @Configuration
 @EnableWebSecurity
@@ -90,6 +88,34 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /* To create new accepted endpoints change .autorizeHttpRequests( ,requestMatchers()
+    * There are conflicts with Oauth2, so one way is to call anonymous() also
+    * It can't be called again so it need to be changed in this Bean*/
+    @Bean
+    @Order(1)
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
+            throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .anonymous(Customizer.withDefaults())
+                .formLogin(fl-> fl.usernameParameter("email"))
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
+                        .requestMatchers("/api/auth/signup").permitAll()
+                        .requestMatchers("/api/auth/signup").anonymous()
+                        .anyRequest().authenticated()
+
+
+                )
+                .oauth2Login(Customizer.withDefaults())
+
+                .cors(cors-> cors.disable());
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
     @Bean
     @Order(2)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -97,7 +123,6 @@ public class SecurityConfig {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
- // Enable OpenID Connect 1.0
         http
                 // Redirect to the OAuth 2.0 Login endpoint when not authenticated
                 // from the authorization endpoint
@@ -112,37 +137,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
- /*   public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .requestMatchers("/api/auth/signup");
-    }
-*/
-    @Bean
- @Order(1)
- public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
-         throws Exception {
-     http.csrf(csrf -> csrf.disable())
-             .anonymous(Customizer.withDefaults())
-             .formLogin(fl-> fl.usernameParameter("email"))
-             .authorizeHttpRequests((authorize) -> authorize
-                     .requestMatchers("/login").permitAll()
-                     .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
-                     .requestMatchers("/api/auth/signup").permitAll()
-                     .requestMatchers("/api/auth/signup").anonymous()
-                     .anyRequest().authenticated()
-
-
-             )
-             .oauth2Login(Customizer.withDefaults())
-
-             .cors(cors-> cors.disable());
-     http.authenticationProvider(authenticationProvider());
-     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-     return http.build();
- }
-
 
 
 

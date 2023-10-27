@@ -32,6 +32,12 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
+
+
     public String randomUsername() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
@@ -46,11 +52,6 @@ public class User {
         System.out.println(generatedString);
         return generatedString;
     }
-
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    private String email;
 
     public User(){
 
