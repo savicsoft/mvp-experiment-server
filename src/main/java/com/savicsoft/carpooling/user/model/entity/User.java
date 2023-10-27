@@ -1,6 +1,7 @@
 package com.savicsoft.carpooling.user.model.entity;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -24,13 +25,27 @@ public class User {
 
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     private String username;
 
     @NotBlank
     @Size(max = 120)
     private String password;
 
+    public String randomUsername() {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        System.out.println(generatedString);
+        return generatedString;
+    }
 
     @NotBlank
     @Size(max = 50)
@@ -40,8 +55,8 @@ public class User {
     public User(){
 
     }
-    public User(String username, String email, String password){
-        this.username = username;
+    public User(String email, String password){
+        this.username = randomUsername();
         this.password = password;
         this.email = email;
     }
