@@ -2,10 +2,13 @@ package com.savicsoft.carpooling.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -13,6 +16,7 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
+import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
@@ -22,7 +26,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,8 +38,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.savicsoft.carpooling.security.jwt.AuthEntryPointJwt;
 import com.savicsoft.carpooling.security.jwt.AuthTokenFilter;
 import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.UUID;
+import java.util.stream.Stream;
+
+import static io.jsonwebtoken.lang.Collections.toArray;
 
 /*To sign up
 Send a POST request to {{URL}}/api/auth/signup with a JSON
@@ -83,19 +91,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(1)
+    @Order(2)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
             throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-                .oidc(Customizer.withDefaults());	// Enable OpenID Connect 1.0
+                .oidc(Customizer.withDefaults());
+ // Enable OpenID Connect 1.0
         http
                 // Redirect to the OAuth 2.0 Login endpoint when not authenticated
                 // from the authorization endpoint
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/oauth2/authorization/my-client"),
+                                new LoginUrlAuthenticationEntryPoint("/oauth2/authorization/my-clie"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
                 )
@@ -105,26 +113,37 @@ public class SecurityConfig {
         return http.build();
     }
 
- @Bean
- @Order(2)
+ /*   public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .requestMatchers("/api/auth/signup");
+    }
+*/
+    @Bean
+ @Order(1)
  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
          throws Exception {
      http.csrf(csrf -> csrf.disable())
+             .anonymous(Customizer.withDefaults())
+             .formLogin(fl-> fl.usernameParameter("email"))
              .authorizeHttpRequests((authorize) -> authorize
                      .requestMatchers("/login").permitAll()
-                     .requestMatchers("/api/auth/signin").permitAll()
+                     .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
                      .requestMatchers("/api/auth/signup").permitAll()
+                     .requestMatchers("/api/auth/signup").anonymous()
                      .anyRequest().authenticated()
+
 
              )
              .oauth2Login(Customizer.withDefaults())
-             .formLogin(Customizer.withDefaults())
+
              .cors(cors-> cors.disable());
      http.authenticationProvider(authenticationProvider());
      http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
      return http.build();
  }
+
+
 
 
     @Bean
@@ -142,9 +161,9 @@ public class SecurityConfig {
         }
         @Bean
         public ClientRegistrationRepository clientRegistrationRepository () {
-            return new InMemoryClientRegistrationRepository(this.facebookClientRegistration(), this.googleClientRegistration());
+            return new InMemoryClientRegistrationRepository(this.facebookClientRegistration(), this.googleClientRegistration()
+                  );
         }
-
         private ClientRegistration googleClientRegistration () {
             return ClientRegistration.withRegistrationId("google")
                     .clientId("358759268020-2nobses99s0vl397r5mhvpo610328fjt.apps.googleusercontent.com")
