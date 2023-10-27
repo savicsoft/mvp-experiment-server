@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.user.service;
+package com.savicsoft.carpooling.googlecloudstorage;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -20,8 +20,9 @@ public class GoogleCloudStorageService {
     private final Storage storage;
     private final String bucketName;
 
-    public GoogleCloudStorageService(@Value("${GCS_API_KEY}") String apiKey, @Value("${GCS_BUCKET_NAME}") String bucketName) throws IOException {
-        Credentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(apiKey.getBytes()));
+    public GoogleCloudStorageService(@Value("${GCS_BUCKET_NAME}") String bucketName) throws IOException {
+        InputStream serviceAccount = getClass().getResourceAsStream("/google_key.json");
+        Credentials credentials = GoogleCredentials.fromStream(serviceAccount);
 
         if (credentials instanceof ServiceAccountCredentials) {
             String projectId = ((ServiceAccountCredentials) credentials).getProjectId();
@@ -36,22 +37,14 @@ public class GoogleCloudStorageService {
         this.bucketName = bucketName;
     }
 
-    /**
-     * Uploads a file to Google Cloud Storage.
-     *
-     * @param file       The file to upload.
-     * @param fileName The name of the object in the bucket.
-     * @return The UUID metadata of the uploaded file (so it can be stored in database and linked with user that uploaded file).
-     * @throws IOException if an error occurs during the upload.
-     */
-    public String uploadFile(MultipartFile file, String fileName) throws IOException {
+    public void uploadFile(MultipartFile file, String fileName, UUID userUUID) throws IOException {
         if (file == null || file.isEmpty() || fileName == null || fileName.isEmpty()) {
             throw new IllegalArgumentException("File and fileName cannot be null or empty.");
         }
 
         BlobId blobId = BlobId.of(bucketName, fileName);
         Map<String, String> metadata = new HashMap<>();
-        metadata.put("uuid", UUID.randomUUID().toString());
+        metadata.put("uuid", userUUID.toString());
 
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
                 .setContentType(file.getContentType())
@@ -59,8 +52,6 @@ public class GoogleCloudStorageService {
                 .build();
 
         storage.create(blobInfo, file.getBytes());
-
-        return blobInfo.getMetadata().get("uuid");
     }
 
     public void deleteFile(String fileName) {

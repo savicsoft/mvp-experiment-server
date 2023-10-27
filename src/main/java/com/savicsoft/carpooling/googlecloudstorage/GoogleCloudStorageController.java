@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.user.controller;
+package com.savicsoft.carpooling.googlecloudstorage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,23 +8,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.cloud.storage.Blob;
 
-import com.savicsoft.carpooling.user.service.GoogleCloudStorageService;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/storage")
-public class StorageController {
+public class GoogleCloudStorageController {
     private final GoogleCloudStorageService storageService;
 
     @Autowired
-    public StorageController(GoogleCloudStorageService storageService) {
+    public GoogleCloudStorageController(GoogleCloudStorageService storageService) {
         this.storageService = storageService;
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("fileName") String fileName) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("fileName") String fileName, @RequestParam("userUUID") UUID userUUID) {
         try {
-            String uuid = storageService.uploadFile(file, fileName);
-            return ResponseEntity.ok(uuid);
+            storageService.uploadFile(file, fileName, userUUID);
+            return ResponseEntity.ok("File uploaded successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to upload the file: " + e.getMessage());
         }
@@ -48,9 +48,11 @@ public class StorageController {
             return ResponseEntity.ok()
                     .header("Content-Type", blob.getContentType())
                     .header("Content-Disposition", "attachment; filename=" + fileName)
+                    .header("UUID", blob.getMetadata().get("uuid"))
                     .body(fileContent);
         } catch (Exception e) {
             String errorMessage = "Failed to download the file: " + e.getMessage();
+
             return ResponseEntity
                     .badRequest()
                     .contentType(MediaType.TEXT_PLAIN)
