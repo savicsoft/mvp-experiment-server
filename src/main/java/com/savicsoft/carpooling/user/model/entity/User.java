@@ -1,5 +1,9 @@
 package com.savicsoft.carpooling.user.model.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -11,8 +15,22 @@ import jakarta.validation.constraints.Size;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.context.annotation.Bean;
 
+
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
+import org.springframework.context.annotation.Bean;
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
 @Entity
-@Table(name="users",
+@Table(name="carpool_user",
         uniqueConstraints = {
             @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
