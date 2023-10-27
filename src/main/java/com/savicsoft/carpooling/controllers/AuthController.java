@@ -20,7 +20,7 @@ import com.savicsoft.carpooling.payload.LoginRequest;
 import com.savicsoft.carpooling.payload.SignupRequest;
 import com.savicsoft.carpooling.payload.JwtResponse;
 import com.savicsoft.carpooling.payload.MessageResponse;
-import com.savicsoft.carpooling.repository.UserRepository;
+import com.savicsoft.carpooling.user.repository.UserRepository;
 import com.savicsoft.carpooling.security.jwt.JwtUtils;
 import com.savicsoft.carpooling.security.services.UserDetailsImpl;
 

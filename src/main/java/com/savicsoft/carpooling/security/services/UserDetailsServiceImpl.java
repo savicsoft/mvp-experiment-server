@@ -1,7 +1,6 @@
 package com.savicsoft.carpooling.security.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.savicsoft.carpooling.user.model.entity.User;
-import com.savicsoft.carpooling.repository.UserRepository;
+import com.savicsoft.carpooling.user.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
