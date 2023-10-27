@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.car.entity;
+package com.savicsoft.carpooling.car.model.entity;
 
 import com.savicsoft.carpooling.user.model.entity.User;
 import jakarta.persistence.*;

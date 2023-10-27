@@ -1,6 +1,6 @@
 package com.savicsoft.carpooling.user.model.entity;
 
-import com.savicsoft.carpooling.car.entity.Car;
+import com.savicsoft.carpooling.car.model.entity.Car;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
