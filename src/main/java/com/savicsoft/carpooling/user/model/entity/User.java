@@ -26,9 +26,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.context.annotation.Bean;
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+@Data
+@AllArgsConstructor
 @Entity
 @Table(name="carpool_user",
         uniqueConstraints = {
