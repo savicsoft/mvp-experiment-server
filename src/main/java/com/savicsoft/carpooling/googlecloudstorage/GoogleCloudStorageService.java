@@ -37,7 +37,7 @@ public class GoogleCloudStorageService {
         this.bucketName = bucketName;
     }
 
-    public void uploadFile(MultipartFile file, String fileName, UUID userUUID) throws IOException {
+    public Blob uploadFile(MultipartFile file, String fileName, UUID userUUID) throws IOException {
         if (file == null || file.isEmpty() || fileName == null || fileName.isEmpty()) {
             throw new IllegalArgumentException("File and fileName cannot be null or empty.");
         }
@@ -51,15 +51,15 @@ public class GoogleCloudStorageService {
                 .setMetadata(metadata)
                 .build();
 
-        storage.create(blobInfo, file.getBytes());
+        return storage.create(blobInfo, file.getBytes());
     }
 
-    public void deleteFile(String fileName) {
+    public boolean deleteFile(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             throw new IllegalArgumentException("fileName cannot be null or empty.");
         }
 
-        storage.delete(bucketName, fileName);
+        return storage.delete(bucketName, fileName);
     }
 
     public Blob downloadFile(String fileName) {

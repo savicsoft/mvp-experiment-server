@@ -1,6 +1,7 @@
 package com.savicsoft.carpooling.googlecloudstorage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,9 @@ public class GoogleCloudStorageController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteFile(@RequestParam("fileName") String fileName) {
         try {
-            storageService.deleteFile(fileName);
-            return ResponseEntity.ok("File deleted successfully");
+            if (storageService.deleteFile(fileName))
+                return ResponseEntity.ok("File deleted successfully");
+            else return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to delete the file: " + e.getMessage());
         }
@@ -44,15 +46,17 @@ public class GoogleCloudStorageController {
     public ResponseEntity<byte[]> downloadFile(@RequestParam("fileName") String fileName) {
         try {
             Blob blob = storageService.downloadFile(fileName);
-            byte[] fileContent = blob.getContent();
-            return ResponseEntity.ok()
-                    .header("Content-Type", blob.getContentType())
-                    .header("Content-Disposition", "attachment; filename=" + fileName)
-                    .header("UUID", blob.getMetadata().get("uuid"))
-                    .body(fileContent);
+            if (blob == null) return ResponseEntity.notFound().build();
+            else {
+                byte[] fileContent = blob.getContent();
+                return ResponseEntity.ok()
+                        .header("Content-Type", blob.getContentType())
+                        .header("Content-Disposition", "attachment; filename=" + fileName)
+                        .header("UUID", blob.getMetadata().get("uuid"))
+                        .body(fileContent);
+            }
         } catch (Exception e) {
             String errorMessage = "Failed to download the file: " + e.getMessage();
-
             return ResponseEntity
                     .badRequest()
                     .contentType(MediaType.TEXT_PLAIN)
