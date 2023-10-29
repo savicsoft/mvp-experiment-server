@@ -5,9 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 import java.util.UUID;
+import java.util.Collection;
+
 
 @Data
 @NoArgsConstructor
@@ -18,6 +19,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private String email;
@@ -28,6 +30,9 @@ public class User {
     private String country;
     private String city;
     private boolean isDriver;
+
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//    private Collection<Car> cars;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
