@@ -19,20 +19,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable())
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(form -> form.disable())
-                .securityMatcher("/**")
-                .authorizeHttpRequests(
-                        registry -> registry
-                                .requestMatchers("/").permitAll().anyRequest().authenticated()
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .anyRequest()
-                                .authenticated()
-                )
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                );
         return http.build();
     }
 }
