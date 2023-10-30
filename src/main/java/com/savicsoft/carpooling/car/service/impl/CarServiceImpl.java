@@ -1,5 +1,7 @@
 package com.savicsoft.carpooling.car.service.impl;
 
+import com.savicsoft.carpooling.car.dto.CarDTO;
+import com.savicsoft.carpooling.car.dto.mapper.CarDTOMapper;
 import com.savicsoft.carpooling.car.model.entity.Car;
 import com.savicsoft.carpooling.car.repository.CarRepository;
 import com.savicsoft.carpooling.car.service.CarService;
@@ -8,19 +10,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.savicsoft.carpooling.car.dto.mapper.CarDTOMapper.toDto;
 
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     @Override
-    public List<Car> getAllUsersCars(Long id) {
-        return carRepository.findAllByUserId(id);
+    public List<CarDTO> getAllUsersCars(Long id) {
+        return carRepository.findAllByUserId(id).stream().map(CarDTOMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<Car> getAllCars() {
-        return carRepository.findAll();
+    public List<CarDTO> getAllCars() {
+        return carRepository.findAll().stream().map(CarDTOMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -39,22 +44,22 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car getCarByRegistrationNumber(String registration) {
-        return carRepository.findCarByRegistrationNumber(registration);
+    public CarDTO getCarByRegistrationNumber(String registration) {
+        return toDto(carRepository.findCarByRegistrationNumber(registration));
     }
 
     @Override
-    public Car getCarById(Long id) {
-        return carRepository.findCarById(id);
+    public CarDTO getCarById(Long id) {
+        return toDto(carRepository.findCarById(id));
     }
 
     @Override
-    public Car createCar(Car car) {
-        return carRepository.save(car);
+    public CarDTO createCar(Car car) {
+        return toDto(carRepository.save(car));
     }
 
     @Override
-    public Car getCarByUUID(UUID uuid) {
-        return carRepository.findCarByUuid(uuid);
+    public CarDTO getCarByUUID(UUID uuid) {
+        return toDto(carRepository.findCarByUuid(uuid));
     }
 }

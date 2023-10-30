@@ -1,5 +1,6 @@
 package com.savicsoft.carpooling.car.controller;
 
+import com.savicsoft.carpooling.car.dto.CarDTO;
 import com.savicsoft.carpooling.car.enumeration.FuelType;
 import com.savicsoft.carpooling.car.forms.CarForm;
 import com.savicsoft.carpooling.car.model.entity.Car;
@@ -37,7 +38,7 @@ public class CarController {
     //TODO: This will be for testing and should be enabled for admins only
     @GetMapping("/list")
     public ResponseEntity<HttpResponse> getAllCars(){
-        List<Car> cars =  carService.getAllCars();
+        List<CarDTO> cars =  carService.getAllCars();
         return ResponseEntity.ok(
                 HttpResponse.builder()
                         .timeStamp(LocalDateTime.now().toString())
@@ -50,7 +51,7 @@ public class CarController {
     }
     @GetMapping("/list/user")
     public ResponseEntity<HttpResponse> getUsersCars(@RequestBody User user){
-        List<Car> cars =  carService.getAllUsersCars(user.getId());
+        List<CarDTO> cars =  carService.getAllUsersCars(user.getId());
         return ResponseEntity.ok(
                 HttpResponse.builder()
                         .timeStamp(LocalDateTime.now().toString())
@@ -63,7 +64,7 @@ public class CarController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> getCarById(@RequestParam("id") Long id){
-        Car car =  carService.getCarById(id);
+        CarDTO car =  carService.getCarById(id);
         return ResponseEntity.ok(
                 HttpResponse.builder()
                         .timeStamp(LocalDateTime.now().toString())
@@ -77,7 +78,7 @@ public class CarController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<HttpResponse> getCarByUUID(@RequestParam("uuid") UUID uuid){
-        Car car =  carService.getCarByUUID(uuid);
+        CarDTO car =  carService.getCarByUUID(uuid);
         return ResponseEntity.ok(
                 HttpResponse.builder()
                         .timeStamp(LocalDateTime.now().toString())
@@ -91,7 +92,7 @@ public class CarController {
 
     @GetMapping("/{regnum}")
     public ResponseEntity<HttpResponse> getCarByRegistrationNumber(@RequestParam("regnum") Long regnum){
-        Car car =  carService.getCarById(regnum);
+        CarDTO car =  carService.getCarById(regnum);
         return ResponseEntity.ok(
                 HttpResponse.builder()
                         .timeStamp(LocalDateTime.now().toString())
@@ -105,7 +106,7 @@ public class CarController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpResponse> deleteCar(@RequestParam("id") Long id){
-        Car car =  carService.getCarById(id);
+        CarDTO car =  carService.getCarById(id);
         carService.deleteById(id);
         return ResponseEntity.ok(
                 HttpResponse.builder()
