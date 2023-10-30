@@ -10,13 +10,14 @@ import java.util.List;
 import com.savicsoft.carpooling.user.model.entity.User;
 
 //Exception Handling not implemented yet!
+@RequestMapping("/api/v1/users")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService service;
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers(){
 
         List<UserDTO> users = service.getAllUsers();
@@ -24,7 +25,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping
     public ResponseEntity<?> getUserById(@PathVariable Long id){
 
         UserDTO userDTO = service.getUserById(id);
@@ -33,7 +34,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody User user){ //Receive a RequestBody with Form?
 
         UserDTO createdUser = service.createUser(user);
@@ -41,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
 
-    @PatchMapping("/users/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id){ //Receive RequestBody with Form or DTO instead Long?
 
         UserDTO updatedUser = service.updateUser(id);
@@ -49,12 +50,11 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id){
 
         UserDTO deletedUser = service.deleteUser(id);
 
         return ResponseEntity.ok(deletedUser);
     }
-
 }
