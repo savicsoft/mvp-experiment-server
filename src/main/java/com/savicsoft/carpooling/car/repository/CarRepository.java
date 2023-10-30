@@ -14,9 +14,9 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findAllByUserId(Long id);
     List<Car> findAll();
     void deleteCarsByUserId(Long id);
-    void deleteByCarId(Long car_id);
+    void deleteById(Long car_id);
     void deleteByRegistrationNumber(String registration);
     Car findCarByRegistrationNumber(String registration);
-    Car findCarByCarId(Long car_id);
+    Car findCarById(Long car_id);
     Car findCarByUuid(UUID uuid);
 }

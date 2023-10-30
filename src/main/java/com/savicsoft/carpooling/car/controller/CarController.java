@@ -6,6 +6,7 @@ import com.savicsoft.carpooling.car.model.entity.Car;
 import com.savicsoft.carpooling.car.service.CarService;
 import com.savicsoft.carpooling.domain.HttpResponse;
 import com.savicsoft.carpooling.user.model.entity.User;
+import com.savicsoft.carpooling.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import static org.springframework.http.HttpStatus.*;
 public class CarController {
 
     private final CarService carService;
+   // private final UserService userService;
 
     //TODO: This will be for testing and should be enabled for admins only
     @GetMapping("/list")
@@ -117,17 +119,24 @@ public class CarController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<HttpResponse> createCustomer(
+    public ResponseEntity<HttpResponse> createCar(
             @RequestBody @Valid CarForm car) throws InterruptedException {
+        //TODO: Add get user by UUID and set the ownership to the same user
         User user = new User();
         user.setId(1l);
+        UUID newUUID = UUID.randomUUID();
+//        while (carService.getCarByUUID(newUUID)!=null){
+//            newUUID = UUID.randomUUID();
+//        }
+
         Car newCar = Car.builder()
                 .color(car.getColor())
                 .fuelType(FuelType.valueOf(car.getFuelType()))
                 .fuelEfficiency(car.getFuelEfficiency())
                 .year(car.getYear())
-                //TODO: Implement User service and get the user by id
                 .user(user)
+                .pictureUrl(car.getPictureUrl())
+                .uuid(newUUID)
                 .registrationNumber(car.getRegistrationNumber())
                 .build();
         return ResponseEntity.created(URI.create(""))

@@ -19,7 +19,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private String email;
@@ -31,12 +30,11 @@ public class User {
     private String city;
     private boolean isDriver;
 
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    private Collection<Car> cars;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "car_id")
-    private Car car;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Collection<Car> cars;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "car_id")
+//    private Car car;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
     private UserPreferences userPreferences;

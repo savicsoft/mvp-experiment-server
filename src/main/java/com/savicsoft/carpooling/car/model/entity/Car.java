@@ -26,9 +26,8 @@ public class Car {
     private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
-    @JsonIgnore
-    @OneToOne (mappedBy = "car", cascade =
-            {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id") //
     private User user;
     @Unique
     @NotEmpty(message = "Registration number must be added")
@@ -38,6 +37,7 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
     private double fuelEfficiency;
+    private String pictureUrl;
 }
 
 

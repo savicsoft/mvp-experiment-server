@@ -30,7 +30,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void deleteById(Long id) {
-        carRepository.deleteByCarId(id);
+        carRepository.deleteById(id);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car getCarById(Long id) {
-        return carRepository.findCarByCarId(id);
+        return carRepository.findCarById(id);
     }
 
     @Override

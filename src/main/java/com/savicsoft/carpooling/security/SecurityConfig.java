@@ -17,6 +17,8 @@ public class SecurityConfig{
                 .csrf(csrf->csrf.disable())
                 .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(form->form.disable())
+                //TODO: This is added for testing perpuses
+                .authorizeHttpRequests(request-> request.requestMatchers("/car/**").permitAll())
                 .securityMatcher("/**")
                 .authorizeHttpRequests(
                         registry->registry
