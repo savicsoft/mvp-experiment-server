@@ -1,5 +1,5 @@
 # Use the official Gradle image as the build environment
-FROM gradle:7.3-jdk17 as build
+FROM gradle:jdk17-graal as build
 
 # Set working directory
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Use Gradle to build the application
-RUN gradle clean build
+RUN gradle clean build -x test
 
 # Use the Eclipse Temurin 17 image as the runtime environment
 FROM eclipse-temurin:17
