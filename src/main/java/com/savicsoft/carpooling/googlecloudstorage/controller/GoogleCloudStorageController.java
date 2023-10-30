@@ -1,7 +1,7 @@
-package com.savicsoft.carpooling.googlecloudstorage;
+package com.savicsoft.carpooling.googlecloudstorage.controller;
 
+import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

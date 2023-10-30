@@ -1,5 +1,7 @@
 package com.savicsoft.carpooling.googlecloudstorage;
 
+import com.savicsoft.carpooling.googlecloudstorage.controller.GoogleCloudStorageController;
+import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;

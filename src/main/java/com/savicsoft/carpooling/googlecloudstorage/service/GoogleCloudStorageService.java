@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.googlecloudstorage;
+package com.savicsoft.carpooling.googlecloudstorage.service;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;

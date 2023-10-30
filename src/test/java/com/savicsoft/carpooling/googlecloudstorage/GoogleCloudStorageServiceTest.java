@@ -2,6 +2,7 @@ package com.savicsoft.carpooling.googlecloudstorage;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
+import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
