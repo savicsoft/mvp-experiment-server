@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.security;
+package com.savicsoft.carpooling.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,11 +18,11 @@ import java.util.function.Function;
 
 @Service
 @Getter
-public class JwtUtil {
+public class JwtService {
     private final String secretKey;
     private final String EXPIRATION;
-    public JwtUtil(@Value("${security.token.secret-key}") String secretKey,
-                   @Value("${security.token.expiration}")  String EXPIRATION) {
+    public JwtService(@Value("${security.token.secret-key}") String secretKey,
+                      @Value("${security.token.expiration}")  String EXPIRATION) {
         this.secretKey = secretKey;
         this.EXPIRATION = EXPIRATION;
     }
@@ -36,17 +36,13 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(), userDetails);
     }
-
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails);
-    }
-
-    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts
-                .builder()
+    public String generateToken (
+            Map<String, Object> extraClaims,
+            UserDetails userDetails){
+        return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -54,10 +50,10 @@ public class JwtUtil {
                 .signWith(getSignInKey())
                 .compact();
     }
-
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean IsTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+
     }
 
     private boolean isTokenExpired(String token) {
@@ -68,9 +64,8 @@ public class JwtUtil {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parser()
+    private Claims extractAllClaims (String token){
+        return Jwts.parser()
                 .verifyWith((SecretKey) getSignInKey())
                 .build()
                 .parseSignedClaims(token)
@@ -78,7 +73,7 @@ public class JwtUtil {
     }
 
     Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        byte[] keyByte = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyByte);
     }
 }
