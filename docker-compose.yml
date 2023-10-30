@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-
-  db:
-    image: postgres
-    container_name: pg_carpooling
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: docker_carpooling
-      POSTGRES_PASSWORD: docker_carpooling
-      POSTGRES_DB: carpooling
-
   carpooling_server:
     container_name: carpooling_server
     build:
@@ -20,5 +9,3 @@ services:
     ports:
       - "8080:8080"
     restart: on-failure
-    depends_on:
-      - db
