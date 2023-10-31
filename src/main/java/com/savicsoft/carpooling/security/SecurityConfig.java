@@ -17,6 +17,8 @@ public class SecurityConfig{
                 .csrf(csrf->csrf.disable())
                 .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(form->form.disable())
+                //TODO: ADDED FOR TESTING
+                .requestMatchers("/**").permitAll());
                 .securityMatcher("/**")
                 .authorizeHttpRequests(
                         registry->registry
