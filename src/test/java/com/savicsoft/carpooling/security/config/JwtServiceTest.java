@@ -59,7 +59,7 @@ public class JwtServiceTest {
 
         String token = jwtService.generateToken(extraClaims, userDetails);
 
-        boolean isValid = jwtService.isTokenValid(token, userDetails);
+        boolean isValid = jwtService.IsTokenValid(token, userDetails);
 
         Assertions.assertTrue(isValid);
     }
