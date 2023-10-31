@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.savicsoft.carpooling.car.dto.mapper.CarDTOMapper.toDto;
+import static com.savicsoft.carpooling.car.dto.mapper.CarDTOMapper.*;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +20,12 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     @Override
     public List<CarDTO> getAllUsersCars(Long id) {
-        return carRepository.findAllByUserId(id).stream().map(CarDTOMapper::toDto).collect(Collectors.toList());
+        return INSTANCE.mapToCarDTOList(carRepository.findAllByUserId(id));
     }
 
     @Override
     public List<CarDTO> getAllCars() {
-        return carRepository.findAll().stream().map(CarDTOMapper::toDto).collect(Collectors.toList());
+        return INSTANCE.mapToCarDTOList(carRepository.findAll());
     }
 
     @Override
@@ -45,21 +45,21 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarDTO getCarByRegistrationNumber(String registration) {
-        return toDto(carRepository.findCarByRegistrationNumber(registration));
+        return INSTANCE.mapToCarDTO(carRepository.findCarByRegistrationNumber(registration));
     }
 
     @Override
     public CarDTO getCarById(Long id) {
-        return toDto(carRepository.findCarById(id));
+        return INSTANCE.mapToCarDTO(carRepository.findCarById(id));
     }
 
     @Override
     public CarDTO createCar(Car car) {
-        return toDto(carRepository.save(car));
+        return INSTANCE.mapToCarDTO(carRepository.save(car));
     }
 
     @Override
     public CarDTO getCarByUUID(UUID uuid) {
-        return toDto(carRepository.findCarByUuid(uuid));
+        return INSTANCE.mapToCarDTO(carRepository.findCarByUuid(uuid));
     }
 }

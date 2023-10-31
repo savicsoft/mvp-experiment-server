@@ -48,6 +48,7 @@ public class CarController {
                         .statusCode(OK.value())
                         .build()
         );
+
     }
     @GetMapping("/list/user")
     public ResponseEntity<HttpResponse> getUsersCars(@RequestBody User user){
@@ -61,6 +62,7 @@ public class CarController {
                         .statusCode(OK.value())
                         .build()
         );
+
     }
     @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> getCarById(@RequestParam("id") Long id){
