@@ -5,9 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 import java.util.UUID;
+import java.util.Collection;
+
 
 @Data
 @NoArgsConstructor
@@ -29,9 +30,11 @@ public class User {
     private String city;
     private boolean isDriver;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "car_id")
-    private Car car;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Collection<Car> cars;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "car_id")
+//    private Car car;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
     private UserPreferences userPreferences;
