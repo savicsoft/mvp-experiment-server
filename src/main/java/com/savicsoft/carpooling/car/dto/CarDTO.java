@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
 import java.util.UUID;
 @Data
 @SuperBuilder
@@ -25,7 +26,7 @@ public class CarDTO {
     private String color;
     private int year;
     private FuelType fuelType;
-    private String pictureUrl;
+    private List<String> pictureUrl;
 
 
 }
