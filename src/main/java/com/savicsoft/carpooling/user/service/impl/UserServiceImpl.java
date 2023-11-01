@@ -1,14 +1,13 @@
 package com.savicsoft.carpooling.user.service.impl;
 
 import com.savicsoft.carpooling.user.dto.UserDTO;
+import com.savicsoft.carpooling.user.mapper.UserMapper;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.repository.UserRepository;
 import com.savicsoft.carpooling.user.service.UserService;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +21,8 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
 
         List<User> users = userRepository.findAll();
-        List<UserDTO> userDTOs = new ArrayList<>();
 
-        for(User user: users) {
-
-            UserDTO userDTO = UserDTO.builder()
-                            .id(user.getId())
-                            .build();
-
-            userDTOs.add(userDTO);
-        }
-
-        return userDTOs;
+        return UserMapper.INSTANCE.usersToUserDTOList(users);
     }
 
     @Override
@@ -41,13 +30,13 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> userOptional = userRepository.findById(id);
 
-        if(userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
 
             return null;
 
-        }else {
+        } else {
 
-            return UserDTO.fromUser(userOptional.get());
+            return UserMapper.INSTANCE.userToDTO(userOptional.get());
 
         }
     }
@@ -57,7 +46,7 @@ public class UserServiceImpl implements UserService {
         //Pending exception handling
         userRepository.save(user);
 
-        return UserDTO.fromUser(user);
+        return UserMapper.INSTANCE.userToDTO(user);
     }
 
 
@@ -71,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.save(userOptional.get());
 
-        return UserDTO.fromUser(user);
+        return UserMapper.INSTANCE.userToDTO(userOptional.get());
 
     }
 
@@ -84,10 +73,8 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        UserDTO userDTO = UserDTO.fromUser(userOptional.get());
-
         userRepository.deleteById(id);
 
-        return userDTO;
+        return UserMapper.INSTANCE.userToDTO(userOptional.get());
     }
 }

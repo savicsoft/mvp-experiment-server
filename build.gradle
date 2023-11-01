@@ -19,6 +19,13 @@ configurations {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
+}
+
+ext {
+	mapstructVersion = "1.5.5.Final"
+	lombokVersion = "1.18.30"
+	lombokMapstructBindingVersion = "0.2.0"
 }
 
 dependencies {
@@ -29,11 +36,13 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-security"
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.flywaydb:flyway-core:9.22.0'
-	runtimeOnly 'org.postgresql:postgresql'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.1.0'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	runtimeOnly 'org.postgresql:postgresql'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.1.0'
 
 }

@@ -4,10 +4,7 @@ import com.savicsoft.carpooling.car.model.entity.Car;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
-
-import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -28,7 +25,7 @@ public class User {
     private String tel;
     private String firstName;
     private String lastName;
-    private Date birthDate;
+    private LocalDate birthDate;
     private String country;
     private String city;
     private boolean isDriver;

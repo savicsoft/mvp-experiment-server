@@ -1,21 +1,24 @@
 package com.savicsoft.carpooling.user.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
-import com.savicsoft.carpooling.user.model.entity.User;
-import lombok.experimental.FieldDefaults;
+import com.savicsoft.carpooling.car.model.entity.Car;
+import com.savicsoft.carpooling.user.model.entity.UserPreferences;
+import lombok.*;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Value
-@Builder
 public class UserDTO {
     Long id;
-
-    public static UserDTO fromUser(User user){
-        return UserDTO.builder()
-                .id(user.getId())
-                .build();
-    }
+    UUID uuid;
+    String email;
+    String tel;
+    String firstName;
+    String lastName;
+    LocalDate birthDate;
+    String country;
+    String city;
+    boolean isDriver;
+    Car car;
+    UserPreferences userPreferences;
 
 }
