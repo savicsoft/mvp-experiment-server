@@ -12,31 +12,31 @@ import java.util.UUID;
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-//@Builder
+@Builder
 @Entity
 @Table(name="carpool_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String tel;
-    private Date birthDate;
-    private String country;
-    private String city;
-    private boolean isDriver;
+    UUID uuid;
+    String email;
+    String password;
+    String firstName;
+    String lastName;
+    String tel;
+    Date birthDate;
+    String country;
+    String city;
+    boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
-    private Car car;
+    Car car;
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
-    private UserPreferences userPreferences;
+    UserPreferences userPreferences;
 
 }

@@ -3,7 +3,6 @@ package com.savicsoft.carpooling.user.controller;
 import com.savicsoft.carpooling.user.dto.UserDTO;
 import com.savicsoft.carpooling.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
