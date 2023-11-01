@@ -4,9 +4,13 @@ import com.savicsoft.carpooling.car.model.entity.Car;
 import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+//@Builder
 public class UserDTO {
     Long id;
     UUID uuid;
@@ -14,7 +18,7 @@ public class UserDTO {
     String tel;
     String firstName;
     String lastName;
-    LocalDate birthDate;
+    Date birthDate;
     String country;
     String city;
     boolean isDriver;

@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 @Entity
 @Table(name="carpool_user")
 public class User {
@@ -22,10 +23,10 @@ public class User {
     private UUID uuid;
     private String email;
     private String password;
-    private String tel;
     private String firstName;
     private String lastName;
-    private LocalDate birthDate;
+    private String tel;
+    private Date birthDate;
     private String country;
     private String city;
     private boolean isDriver;

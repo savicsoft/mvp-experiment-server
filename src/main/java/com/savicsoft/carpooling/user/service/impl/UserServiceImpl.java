@@ -16,13 +16,14 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public List<UserDTO> getAllUsers() {
 
         List<User> users = userRepository.findAll();
 
-        return UserMapper.INSTANCE.usersToUserDTOList(users);
+        return userMapper.usersToUserDTOList(users);
     }
 
     @Override
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
         } else {
 
-            return UserMapper.INSTANCE.userToDTO(userOptional.get());
+            return userMapper.userToUserDTO(userOptional.get());
 
         }
     }
@@ -46,12 +47,12 @@ public class UserServiceImpl implements UserService {
         //Pending exception handling
         userRepository.save(user);
 
-        return UserMapper.INSTANCE.userToDTO(user);
+        return userMapper.userToUserDTO(user);
     }
 
 
     @Override
-    public UserDTO updateUser(Long id) { //Receive parameter form or DTO instead Long?
+    public UserDTO updateUser(Long id) { //Receive parameter form or DTO instead of Long?
         Optional<User> userOptional = userRepository.findById(id);
 
         if(userOptional.isEmpty()){
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.save(userOptional.get());
 
-        return UserMapper.INSTANCE.userToDTO(userOptional.get());
+        return userMapper.userToUserDTO(userOptional.get());
 
     }
 
@@ -75,6 +76,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(id);
 
-        return UserMapper.INSTANCE.userToDTO(userOptional.get());
+        return userMapper.userToUserDTO(userOptional.get());
     }
 }
