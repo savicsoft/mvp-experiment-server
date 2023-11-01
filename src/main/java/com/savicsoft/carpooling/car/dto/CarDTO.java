@@ -17,9 +17,6 @@ import org.springframework.beans.BeanUtils;
 import java.util.UUID;
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class CarDTO {
 
     private UUID uuid;

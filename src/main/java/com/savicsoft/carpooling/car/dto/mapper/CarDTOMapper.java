@@ -11,10 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Mapper
 public interface CarDTOMapper {
-
     CarDTOMapper INSTANCE = Mappers.getMapper(CarDTOMapper.class);
     CarDTO mapToCarDTO(Car user);
     Car mapToCar(CarDTO userDTO);
