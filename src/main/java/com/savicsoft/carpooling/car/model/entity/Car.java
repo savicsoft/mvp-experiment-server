@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -37,7 +38,8 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
     private double fuelEfficiency;
-    private String pictureUrl;
+    @ElementCollection
+    private List<String> pictureUrl;
 }
 
 
