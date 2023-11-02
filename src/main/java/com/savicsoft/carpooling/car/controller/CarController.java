@@ -140,7 +140,7 @@ public class CarController {
                 .fuelEfficiency(car.getFuelEfficiency())
                 .year(car.getYear())
                 .user(user)
-                .pictureUrls(car.getPictureUrl())
+                .pictureUrl(car.getPictureUrl())
                 .uuid(newUUID)
                 .registrationNumber(car.getRegistrationNumber())
                 .build();
@@ -155,9 +155,9 @@ public class CarController {
                                 .build());
     }
 
-    @PostMapping("/{carUUID}/upload-image}")
+    @PostMapping("/{carUUID}/upload-image")
     public ResponseEntity<HttpResponse> uploadCarPicture(@PathVariable UUID carUUID, @RequestBody ImageUploadForm carImageForm) {
-        int existingPictures = carService.getCarByUUID(carUUID).getPictureUrls().size();
+        int existingPictures = carService.getCarByUUID(carUUID).getPictureUrl().size();
 
         if (existingPictures >= 5) {
             return ResponseEntity.badRequest().body(
@@ -175,7 +175,7 @@ public class CarController {
             String fullFileName = userUUID.toString() + "/" + carUUID.toString() + "/" + carImageForm.getFileName();
 
             Blob uploadedPicture = storageService.uploadFile(carImageForm.getPicture(), fullFileName, carUUID);
-            carService.getCarByUUID(carUUID).getPictureUrls().add("https://storage.googleapis.com/" + uploadedPicture.getName());
+            carService.getCarByUUID(carUUID).getPictureUrl().add("https://storage.googleapis.com/" + uploadedPicture.getName());
 
             return ResponseEntity.ok(
                     HttpResponse.builder()
