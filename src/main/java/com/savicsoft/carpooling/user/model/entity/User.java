@@ -47,7 +47,6 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_preferences_id")
     UserPreferences userPreferences;
 
-    private UserPreferences userPreferences;
     @Enumerated(EnumType.STRING)
     private Role role;
     @Override
