@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.security;
+package com.savicsoft.carpooling.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,11 +18,11 @@ import java.util.function.Function;
 
 @Service
 @Getter
-public class JwtUtil {
+public class JwtService {
     private final String secretKey;
     private final String EXPIRATION;
-    public JwtUtil(@Value("${security.token.secret-key}") String secretKey,
-                   @Value("${security.token.expiration}")  String EXPIRATION) {
+    public JwtService(@Value("${security.token.secret-key}") String secretKey,
+                      @Value("${security.token.expiration}")  String EXPIRATION) {
         this.secretKey = secretKey;
         this.EXPIRATION = EXPIRATION;
     }
