@@ -19,7 +19,7 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor (error: constructor CarDTO() is already defined in class CarDTO @RequiredArgsConstructor)
 public class CarDTO {
 
     private UUID uuid;

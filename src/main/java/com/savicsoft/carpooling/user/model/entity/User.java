@@ -2,9 +2,7 @@ package com.savicsoft.carpooling.user.model.entity;
 
 import com.savicsoft.carpooling.car.model.entity.Car;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.util.Date;
 import java.util.UUID;

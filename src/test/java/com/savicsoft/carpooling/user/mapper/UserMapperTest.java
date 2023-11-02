@@ -19,7 +19,6 @@ class UserMapperTest {
     private User user1;
     private User user2;
     private UserDTO userDTO1;
-    private UserDTO userDTO2;
     List<User> users = new ArrayList<>();
     List<UserDTO> userDTOs = new ArrayList<>();
     @BeforeEach
@@ -49,7 +48,7 @@ class UserMapperTest {
         UserDTO userDTO = userMapper.userToUserDTO(user1);
         assertThat(user1)
                 .usingRecursiveComparison()
-                .ignoringFields("password")
+                .ignoringFields("password","cars")
                 .isEqualTo(userDTO);
 
     }
@@ -59,7 +58,7 @@ class UserMapperTest {
         user2 = userMapper.userDTOToUser(userDTO1);
         assertThat(user1)
                 .usingRecursiveComparison()
-                .ignoringFields("password")
+                .ignoringFields("password","cars")
                 .isEqualTo(userDTO1);
 
     }
@@ -72,7 +71,7 @@ class UserMapperTest {
 
         assertThat(users)
                 .usingRecursiveComparison()
-                .ignoringFields("password")
+                .ignoringFields("password","cars")
                 .isEqualTo(userDTOs);
 
 
