@@ -29,6 +29,7 @@ public class User {
     Date birthDate;
     String country;
     String city;
+    @Column(name="is_driver")
     boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
     @OneToOne(cascade = CascadeType.ALL)
