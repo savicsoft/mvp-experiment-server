@@ -49,7 +49,7 @@ public class AuthenticationService {
                 .birthDate(birthDate)
                 .country(request.getCountry())
                 .city(request.getCity())
-                .isDriver(!request.isDriver())
+                .driver(!request.isDriver())
                 .userPreferences(userPreferences)
                 .role(Role.USER)
                 .build();
