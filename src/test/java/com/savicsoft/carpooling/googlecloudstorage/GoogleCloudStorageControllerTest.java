@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@TestPropertySource("/application-test.properties")
+@TestPropertySource("/application.properties")
 class GoogleCloudStorageControllerTest {
 
     private final GoogleCloudStorageService storageService = mock(GoogleCloudStorageService.class);
