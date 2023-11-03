@@ -40,9 +40,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Car> cars;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "car_id")
-//    private Car car;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
     UserPreferences userPreferences;

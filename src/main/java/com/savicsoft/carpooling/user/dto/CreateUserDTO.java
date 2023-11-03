@@ -1,10 +1,12 @@
 package com.savicsoft.carpooling.user.dto;
 
 import com.savicsoft.carpooling.car.model.entity.Car;
+import com.savicsoft.carpooling.user.model.entity.Role;
 import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -25,6 +27,7 @@ public class CreateUserDTO {
     String country;
     String city;
     boolean driver;
-    Car car;
+    Collection<Car> cars;
     UserPreferences userPreferences;
+    Role role;
 }
