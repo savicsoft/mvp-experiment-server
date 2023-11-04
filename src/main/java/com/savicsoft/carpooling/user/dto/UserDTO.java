@@ -20,7 +20,7 @@ public class UserDTO {
     Long id;
     UUID uuid;
     String email;
-    String tel;
+    String phoneNumber;
     String firstName;
     String lastName;
     LocalDate birthDate;

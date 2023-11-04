@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.Collection;
@@ -30,9 +29,13 @@ public class User implements UserDetails {
     UUID uuid;
     String email;
     String password;
+    @Column(name = "first_name")
     String firstName;
+    @Column(name = "last_name")
     String lastName;
-    String tel;
+    @Column(name = "phone_number")
+    String phoneNumber;
+    @Column(name = "birth_date")
     LocalDate birthDate;
     String country;
     String city;

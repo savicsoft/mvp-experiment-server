@@ -21,7 +21,7 @@ public class CreateUserDTO {
     UUID uuid;
     String password;
     String email;
-    String tel;
+    String phoneNumber;
     String firstName;
     String lastName;
     LocalDate birthDate;

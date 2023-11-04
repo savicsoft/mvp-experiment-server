@@ -44,6 +44,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
                 .birthDate(birthDate)
                 .country(request.getCountry())
                 .city(request.getCity())

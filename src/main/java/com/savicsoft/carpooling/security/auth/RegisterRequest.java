@@ -18,7 +18,7 @@ public class RegisterRequest {
     private int year;
     private int month;
     private int day;
-    //
+    private String phoneNumber;
     private String country;
     private String city;
     private boolean isDriver;
