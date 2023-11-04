@@ -23,7 +23,7 @@ public class UserDTO {
     String tel;
     String firstName;
     String lastName;
-    Date birthDate;
+    LocalDate birthDate;
     String country;
     String city;
     //if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct

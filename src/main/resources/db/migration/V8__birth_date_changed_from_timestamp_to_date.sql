@@ -1,0 +1,2 @@
+ALTER TABLE carpool_user
+ALTER COLUMN birth_date SET DATA TYPE DATE;

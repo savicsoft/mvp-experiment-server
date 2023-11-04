@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -28,10 +29,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     public AuthenticationResponse register(RegisterRequest request) throws ParseException {
         // birthdate builder
-        var birthDate = new Calendar.Builder()
-                .setDate(request.getYear(), request.getMonth(), request.getDay())
-                .setTimeOfDay(0, 0, 0)
-                .build().getTime();
+        var birthDate = LocalDate.of(request.getYear(), request.getMonth(), request.getDay());
 
         var userPreferences = UserPreferences.builder()
                 .language(request.getLanguage())
