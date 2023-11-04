@@ -6,6 +6,7 @@ import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class CreateUserDTO {
     String tel;
     String firstName;
     String lastName;
-    Date birthDate;
+    LocalDate birthDate;
     String country;
     String city;
     boolean driver;
