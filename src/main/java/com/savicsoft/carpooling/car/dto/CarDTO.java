@@ -19,7 +19,6 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class CarDTO {
 
     private UUID uuid;

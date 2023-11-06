@@ -20,7 +20,9 @@ public class UserPreferences {
     private String communication;
 
     //bi-directional one-to-one
+    @MapsId
     @OneToOne (mappedBy = "userPreferences", cascade =
             {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User user;
+
 }
