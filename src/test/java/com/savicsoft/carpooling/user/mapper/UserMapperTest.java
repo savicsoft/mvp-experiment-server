@@ -33,7 +33,7 @@ class UserMapperTest {
                 .password("password")
                 .firstName("John")
                 .lastName("Doe")
-                .tel("123456789")
+                .phoneNumber("123456789")
                 .birthDate(LocalDate.of(1990,1,1))
                 .country("USA")
                 .city("New York")
