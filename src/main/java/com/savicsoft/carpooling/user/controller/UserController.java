@@ -43,9 +43,9 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id){ //Receive RequestBody with Form or DTO instead Long?
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){ //Receive RequestBody with Form or DTO instead Long?
 
-        UserDTO updatedUser = service.updateUser(id);
+        UserDTO updatedUser = service.updateUser(userDTO);
 
         return ResponseEntity.ok(updatedUser);
     }

@@ -6,7 +6,6 @@ import lombok.Data;
 public class UserErrorInfo {
     private String message;
     private int statusCode;
-    private String uriRequested;
     private long timestamp;
 
 }

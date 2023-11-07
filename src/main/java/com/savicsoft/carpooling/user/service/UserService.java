@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface UserService {
 
     List<UserDTO> getAllUsers();
-    UserDTO getUserById(Long id) throws UserNotFoundException;
+    UserDTO getUserById(Long id);
     UserDTO createUser(CreateUserDTO userDTO);
-    UserDTO updateUser(Long id) throws UserNotFoundException;
-    UserDTO deleteUser(Long id) throws UserNotFoundException;
+    UserDTO updateUser(UserDTO userDTO);
+    UserDTO deleteUser(Long id);
 
 }
