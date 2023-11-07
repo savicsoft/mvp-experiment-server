@@ -12,23 +12,22 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-@FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CreateUserDTO {
-    Long id;
-    UUID uuid;
-    String password;
-    String email;
-    String phoneNumber;
-    String firstName;
-    String lastName;
-    LocalDate birthDate;
-    String country;
-    String city;
-    boolean driver;
-    Collection<Car> cars;
-    UserPreferences userPreferences;
-    Role role;
+    private Long id;
+    private UUID uuid;
+    private String password;
+    private String email;
+    private String phoneNumber;
+    private String firstName;
+    private String lastName;
+    private LocalDate birthDate;
+    private String country;
+    private String city;
+    private boolean driver;
+    private Collection<Car> cars;
+    private UserPreferences userPreferences;
+    private Role role;
 }

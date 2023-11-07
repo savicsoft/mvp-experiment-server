@@ -15,7 +15,6 @@ import java.util.Collection;
 
 
 @Data
-@FieldDefaults(level= AccessLevel.PRIVATE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,30 +23,30 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID uuid;
-    String email;
-    String password;
+    private UUID uuid;
+    private String email;
+    private String password;
     @Column(name = "first_name")
-    String firstName;
+    private String firstName;
     @Column(name = "last_name")
-    String lastName;
+    private String lastName;
     @Column(name = "phone_number")
-    String phoneNumber;
+    private String phoneNumber;
     @Column(name = "birth_date")
-    LocalDate birthDate;
-    String country;
-    String city;
+    private LocalDate birthDate;
+    private String country;
+    private String city;
     @Column(name="is_driver")
-    boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
+    private boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Car> cars;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
-    UserPreferences userPreferences;
+    private UserPreferences userPreferences;
 
     @Enumerated(EnumType.STRING)
     private Role role;

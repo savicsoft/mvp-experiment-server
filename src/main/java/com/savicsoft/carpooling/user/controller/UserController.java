@@ -1,5 +1,6 @@
 package com.savicsoft.carpooling.user.controller;
 
+import com.savicsoft.carpooling.user.dto.CreateUserDTO;
 import com.savicsoft.carpooling.user.dto.UserDTO;
 import com.savicsoft.carpooling.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user){ //Receive a RequestBody with Form?
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO userDTO){ //Receive a RequestBody with Form?
 
-        UserDTO createdUser = service.createUser(user);
+        UserDTO createdUser = service.createUser(userDTO);
 
         return ResponseEntity.ok(createdUser);
     }

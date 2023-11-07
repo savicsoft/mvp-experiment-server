@@ -12,23 +12,22 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-@FieldDefaults(level= AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UserDTO {
-    Long id;
-    UUID uuid;
-    String email;
-    String phoneNumber;
-    String firstName;
-    String lastName;
-    LocalDate birthDate;
-    String country;
-    String city;
+    private Long id;
+    private UUID uuid;
+    private String email;
+    private String phoneNumber;
+    private String firstName;
+    private String lastName;
+    private LocalDate birthDate;
+    private String country;
+    private String city;
     //if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
-    boolean driver;
-    Collection<Car> cars;
-    UserPreferences userPreferences;
-    Role role;
+    private boolean driver;
+    private Collection<Car> cars;
+    private UserPreferences userPreferences;
+    private Role role;
 }

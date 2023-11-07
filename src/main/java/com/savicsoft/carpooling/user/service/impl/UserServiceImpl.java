@@ -1,17 +1,19 @@
 package com.savicsoft.carpooling.user.service.impl;
 
 import com.savicsoft.carpooling.user.dto.UserDTO;
+import com.savicsoft.carpooling.user.dto.CreateUserDTO;
+import com.savicsoft.carpooling.user.exception.UserCreationException;
+import com.savicsoft.carpooling.user.exception.UserNotFoundException;
 import com.savicsoft.carpooling.user.mapper.UserMapper;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.repository.UserRepository;
 import com.savicsoft.carpooling.user.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
-//Exception Handling not implemented yet!
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -27,13 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
+    public UserDTO getUserById(Long id){
 
         Optional<User> userOptional = userRepository.findById(id);
 
         if (userOptional.isEmpty()) {
 
-            return null;
+            throw new UserNotFoundException("User doesn't exist. Please, check the inserted ID");
 
         } else {
 
@@ -43,11 +45,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(User user) {//Receive a RequestBody with a form?
-        //Pending exception handling
-        userRepository.save(user);
+    public UserDTO createUser(CreateUserDTO userDTO) {//Receive a RequestBody with a form?
 
-        return userMapper.userToUserDTO(user);
+        User user = userMapper.createUserDTOToUser(userDTO);
+
+        try{
+            userRepository.save(user);
+
+            return userMapper.userToUserDTO(user);
+
+        }catch (DataAccessException dae){
+
+            throw new UserCreationException("Internal Error. Couldn't create a new user.");
+
+        }
+
     }
 
 
@@ -56,7 +68,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
 
         if(userOptional.isEmpty()){
-            return null;
+            throw new UserNotFoundException("User doesn't exist. Please, check the inserted ID");
         }
 
         User user = userRepository.save(userOptional.get());
@@ -71,7 +83,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
 
         if(userOptional.isEmpty()){
-            return null;
+            throw new UserNotFoundException("User doesn't exist. Please, check the inserted ID");
         }
 
         userRepository.deleteById(id);
