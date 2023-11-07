@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.UUID;
 @Data
@@ -13,7 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarDTO {
-
     private UUID uuid;
     private User user;
     private String registrationNumber;
@@ -21,6 +21,4 @@ public class CarDTO {
     private int year;
     private FuelType fuelType;
     private List<String> pictureUrl;
-
-
 }

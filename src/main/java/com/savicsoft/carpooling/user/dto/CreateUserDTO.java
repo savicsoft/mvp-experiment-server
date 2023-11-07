@@ -27,4 +27,5 @@ public class CreateUserDTO {
     boolean driver;
     Car car;
     UserPreferences userPreferences;
+    String pictureUrl;
 }
