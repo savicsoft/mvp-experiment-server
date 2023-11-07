@@ -30,4 +30,5 @@ public class UserDTO {
     private Collection<Car> cars;
     private UserPreferences userPreferences;
     private Role role;
+    private String pictureUrl;
 }

@@ -1,6 +1,5 @@
 package com.savicsoft.carpooling.user.controller;
 
-
 import com.savicsoft.carpooling.user.dto.CreateUserDTO;
 import com.google.cloud.storage.Blob;
 import com.savicsoft.carpooling.domain.HttpResponse;
@@ -19,8 +18,6 @@ import java.util.Map;
 import java.util.UUID;
 
 
-
-//Exception Handling not implemented yet!
 @RequestMapping("/api/v1/users")
 @RestController
 @RequiredArgsConstructor
