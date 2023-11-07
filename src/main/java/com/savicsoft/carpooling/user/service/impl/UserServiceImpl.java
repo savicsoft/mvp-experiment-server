@@ -16,6 +16,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -119,4 +120,18 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+   @Override
+    public UserDTO getUserByUuid(UUID uuid) {
+        Optional<User> userOptional = userRepository.findByUuid(uuid);
+
+        if(userOptional.isEmpty()){
+            return null;
+        } else {
+
+            return userMapper.userToUserDTO(userOptional.get());
+
+        }
+    }
+
 }

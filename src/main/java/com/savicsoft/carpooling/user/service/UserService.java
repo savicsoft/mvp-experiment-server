@@ -7,6 +7,7 @@ import com.savicsoft.carpooling.user.model.entity.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserService {
 
@@ -15,5 +16,6 @@ public interface UserService {
     UserDTO createUser(CreateUserDTO userDTO);
     UserDTO updateUser(UserDTO userDTO);
     UserDTO deleteUser(Long id);
+    UserDTO getUserByUuid(UUID uuid);
 
 }

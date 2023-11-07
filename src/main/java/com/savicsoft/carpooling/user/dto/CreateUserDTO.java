@@ -4,11 +4,10 @@ import com.savicsoft.carpooling.car.model.entity.Car;
 import com.savicsoft.carpooling.user.model.entity.Role;
 import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
+
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
