@@ -1,39 +1,41 @@
 package com.savicsoft.carpooling.car.controller;
 
+import com.google.cloud.storage.Blob;
 import com.savicsoft.carpooling.car.dto.CarDTO;
 import com.savicsoft.carpooling.car.enumeration.FuelType;
 import com.savicsoft.carpooling.car.forms.CarForm;
+import com.savicsoft.carpooling.domain.ImageUploadForm;
 import com.savicsoft.carpooling.car.model.entity.Car;
 import com.savicsoft.carpooling.car.service.CarService;
 import com.savicsoft.carpooling.domain.HttpResponse;
+import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
 import com.savicsoft.carpooling.user.model.entity.User;
-import com.savicsoft.carpooling.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static org.springframework.http.HttpStatus.*;
 
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/car")
+@RequestMapping("/api/v1/cars")
 @RequiredArgsConstructor
 public class CarController {
 
     private final CarService carService;
    // private final UserService userService;
+   private final GoogleCloudStorageService storageService;
 
     //TODO: This will be for testing and should be enabled for admins only
     @GetMapping("/list")
@@ -126,7 +128,7 @@ public class CarController {
             @RequestBody @Valid CarForm car) throws InterruptedException {
         //TODO: Add get user by UUID and set the ownership to the same user
         User user = new User();
-        user.setId(1l);
+        user.setId(1L);
         UUID newUUID = UUID.randomUUID();
 //        while (carService.getCarByUUID(newUUID)!=null){
 //            newUUID = UUID.randomUUID();
@@ -153,5 +155,48 @@ public class CarController {
                                 .build());
     }
 
+    @PostMapping("/{carUUID}/upload-image")
+    public ResponseEntity<HttpResponse> uploadCarPicture(@PathVariable UUID carUUID, @RequestBody ImageUploadForm carImageForm) {
+        int existingPictures = carService.getCarByUUID(carUUID).getPictureUrl().size();
 
+        if (existingPictures >= 5) {
+            return ResponseEntity.badRequest().body(
+                    HttpResponse.builder()
+                            .timeStamp(LocalDateTime.now().toString())
+                            .data(Map.of("error", "Maximum number of pictures (5) reached for this car."))
+                            .message("Maximum number of pictures reached")
+                            .status(HttpStatus.BAD_REQUEST)
+                            .statusCode(HttpStatus.BAD_REQUEST.value())
+                            .build()
+            );
+        }
+        try {
+            UUID userUUID = carService.getCarByUUID(carUUID).getUser().getUuid();
+            String fullFileName = userUUID.toString() + "/" + carUUID.toString() + "/" + carImageForm.getFileName();
+
+            Blob uploadedPicture = storageService.uploadFile(carImageForm.getPicture(), fullFileName, carUUID);
+            carService.getCarByUUID(carUUID).getPictureUrl().add("https://storage.googleapis.com/" + uploadedPicture.getName());
+
+            return ResponseEntity.ok(
+                    HttpResponse.builder()
+                               .timeStamp(LocalDateTime.now().toString())
+                               .data(Map.of("picture", uploadedPicture))
+                               .message("Car picture uploaded successfully")
+                               .status(HttpStatus.OK)
+                               .statusCode(HttpStatus.OK.value())
+                               .build()
+            );
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(
+                            HttpResponse.builder()
+                                    .timeStamp(LocalDateTime.now().toString())
+                                    .data(Map.of("error", "Failed to upload car picture: " + e.getMessage()))
+                                    .message("Failed to upload car picture")
+                                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                                    .build()
+                    );
+        }
+    }
 }
