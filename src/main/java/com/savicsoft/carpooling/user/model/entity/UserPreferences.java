@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 public class UserPreferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    @Column(name="user_id")
+    private Long id;
     private String language;
     private String music;
     private String smoking;
