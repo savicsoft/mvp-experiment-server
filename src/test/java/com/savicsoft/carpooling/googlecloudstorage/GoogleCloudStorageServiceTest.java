@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestPropertySource("/application-test.properties")
+@TestPropertySource("/application.properties")
 class GoogleCloudStorageServiceTest {
     @Mock
     private Storage storage;
