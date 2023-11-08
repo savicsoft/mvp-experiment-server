@@ -1,6 +1,5 @@
-package com.savicsoft.carpooling.security;
+package com.savicsoft.carpooling.security.config;
 
-import com.savicsoft.carpooling.CarpoolingApplication;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest
-@TestPropertySource("/application-test.properties")
-public class JwtUtilTest {
+@TestPropertySource("/application.properties")
+public class JwtServiceTest {
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
     @Test
     public void testGenerateToken() {
         UserDetails userDetails = User.withUsername("user")
@@ -27,7 +26,7 @@ public class JwtUtilTest {
                 .roles("USER")
                 .build();
 
-        String token = jwtUtil.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
 
         Assertions.assertNotNull(token);
     }
@@ -38,10 +37,10 @@ public class JwtUtilTest {
                 .subject("user@example.com")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(jwtUtil.getSignInKey())
+                .signWith(jwtService.getSignInKey())
                 .compact();
 
-        String username = jwtUtil.extractUsername(token);
+        String username = jwtService.extractUsername(token);
 
         Assertions.assertEquals("user@example.com", username);
     }
@@ -57,9 +56,9 @@ public class JwtUtilTest {
         extraClaims.put("key1", "value1");
         extraClaims.put("key2", "value2");
 
-        String token = jwtUtil.generateToken(extraClaims, userDetails);
+        String token = jwtService.generateToken(extraClaims, userDetails);
 
-        boolean isValid = jwtUtil.isTokenValid(token, userDetails);
+        boolean isValid = jwtService.isTokenValid(token, userDetails);
 
         Assertions.assertTrue(isValid);
     }
