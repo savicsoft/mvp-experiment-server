@@ -22,15 +22,13 @@ public class SecurityConfig{
         http
                 .cors(cors->cors.disable())
                 .csrf(csrf->csrf.disable())
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/v1/auth/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                .oauth2Login(Customizer.withDefaults())
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .oauth2Login(Customizer.withDefaults());
+
         return http.build();
     }
 }
