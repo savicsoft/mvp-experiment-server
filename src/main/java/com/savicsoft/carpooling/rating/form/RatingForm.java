@@ -1,7 +1,6 @@
 package com.savicsoft.carpooling.rating.form;
 
 import com.savicsoft.carpooling.rating.enumeration.RatingType;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

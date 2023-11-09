@@ -8,8 +8,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: docker_carpooling
-      POSTGRES_PASSWORD: docker_carpooling
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
       POSTGRES_DB: carpooling
 
   carpooling_server:

@@ -102,7 +102,7 @@ public class RatingController {
    }
 
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/get/{UUID}")
     public ResponseEntity<HttpResponse> getRatingByUUID(@PathVariable("UUID") UUID UUID){
 
         Optional<RatingDTO> rating = ratingService.findByUuid(UUID);
