@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReviewService {
-    ReviewDTO createReview(Review review);
-    ReviewDTO updateReview(Long id);
+    ReviewDTO createReview(ReviewDTO review);
+    ReviewDTO updateReview(Long id, ReviewDTO reviewDTO);
     void deleteUser(Long id);
     List<ReviewDTO> getAllReviewsByUserId(Long id);
     ReviewDTO getReviewByUserId(Long id);

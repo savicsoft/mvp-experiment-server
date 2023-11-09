@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @Service
 @AllArgsConstructor
@@ -16,18 +17,35 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
     @Override
-    public ReviewDTO createReview(Review review) {
-         reviewRepository.save(review);
+    public ReviewDTO createReview(ReviewDTO reviewDTO) {
+        Review review = reviewMapper.reviewDTOToReview(reviewDTO);
+        reviewRepository.save(review);
         return reviewMapper.reviewToReviewDTO(review);
     }
 
     @Override
-    public ReviewDTO updateReview(Long id) {
-        return null;
+    public ReviewDTO updateReview(Long id, ReviewDTO reviewDTO) {
+        Review updatedReview = reviewMapper.reviewDTOToReview(reviewDTO);
+        Optional<Review> review = reviewRepository.findById(id);
+
+       if(review.isPresent()){
+           review.get().setDescription(updatedReview.getDescription());
+           review.get().setRating(updatedReview.getRating());
+           reviewRepository.save(review.get());
+           return reviewMapper.reviewToReviewDTO(review.get());
+       }
+       else{
+       return null;
+       }
     }
 
     @Override
     public void deleteUser(Long id) {
+        Optional<Review> review = reviewRepository.findById(id);
+
+        if(review.isPresent()){
+            reviewRepository.deleteById(id);
+        }
 
     }
 
@@ -43,12 +61,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewDTO getReviewById(Long id) {
-        return null;
+        Optional<Review> review = reviewRepository.findById(id);
+
+        return review.map(reviewMapper::reviewToReviewDTO).orElse(null);
     }
 
     @Override
     public List<ReviewDTO> getAllReviews() {
-        return null;
+       List<Review> reviews = reviewRepository.findAll();
+       return reviewMapper.reviewListToReviewDTOList(reviews);
     }
 
     @Override
