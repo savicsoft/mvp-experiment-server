@@ -1,8 +1,11 @@
 package com.savicsoft.carpooling.security.config;
 
-import com.savicsoft.carpooling.security.jwt.AuthEntryPointJwt;
-import com.savicsoft.carpooling.security.jwt.AuthTokenFilter;
+import com.savicsoft.carpooling.security.auth.AuthEntryPointJwt;
+import com.savicsoft.carpooling.security.auth.AuthTokenFilter;
 import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,12 +51,12 @@ To log in
         (securedEnabled = true,
 jsr250Enabled = true,
 prePostEnabled = true)
+@RequiredArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
 public class SecurityConfig {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    final UserDetailsServiceImpl userDetailsService;
+    final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {

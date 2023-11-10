@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.security.jwt;
+package com.savicsoft.carpooling.security.auth;
 import java.io.IOException;
 
 import jakarta.servlet.FilterChain;
@@ -6,6 +6,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +22,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
 
-public class AuthTokenFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtUtils jwtUtils;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+@FieldDefaults(level= AccessLevel.PRIVATE)
+public class AuthTokenFilter extends OncePerRequestFilter {
+     @Autowired
+     JwtUtils jwtUtils;
+     @Autowired
+     UserDetailsServiceImpl userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
-
+    // todo add spring validator
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
