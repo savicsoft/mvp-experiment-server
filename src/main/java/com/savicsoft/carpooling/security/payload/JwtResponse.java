@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.payload;
+package com.savicsoft.carpooling.security.payload;
 
 
 public class JwtResponse {
