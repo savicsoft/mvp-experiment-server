@@ -29,4 +29,6 @@ public class UserDTO {
     Car car;
     UserPreferences userPreferences;
     String pictureUrl;
+    String verificationCode;
+    boolean enabled;
 }

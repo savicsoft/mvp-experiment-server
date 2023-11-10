@@ -38,6 +38,11 @@ public class User implements UserDetails {
     @Column(name="is_driver")
     boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    private boolean enabled;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Car> cars;
 //    @OneToOne(cascade = CascadeType.ALL)

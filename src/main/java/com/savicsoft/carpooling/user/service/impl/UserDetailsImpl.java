@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.security.services;
+package com.savicsoft.carpooling.user.service.impl;
 
 
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +21,17 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private User user;
 
+    public void CustomUserDetails(User user) {
+        this.user = user;
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return user.isEnabled();
+    }
     public UserDetailsImpl(Long id, String username, String email, String password){
         this.id = id;
         this.username = username;
@@ -76,9 +86,6 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+
 
 }

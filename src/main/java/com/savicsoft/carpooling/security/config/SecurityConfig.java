@@ -2,7 +2,7 @@ package com.savicsoft.carpooling.security.config;
 
 import com.savicsoft.carpooling.security.jwt.AuthEntryPointJwt;
 import com.savicsoft.carpooling.security.jwt.AuthTokenFilter;
-import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
+import com.savicsoft.carpooling.user.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

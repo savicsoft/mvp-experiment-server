@@ -5,7 +5,7 @@ import com.savicsoft.carpooling.security.payload.LoginRequest;
 import com.savicsoft.carpooling.security.payload.MessageResponse;
 import com.savicsoft.carpooling.security.payload.SignupRequest;
 import com.savicsoft.carpooling.security.jwt.JwtUtils;
-import com.savicsoft.carpooling.security.services.UserDetailsImpl;
+import com.savicsoft.carpooling.user.service.impl.UserDetailsImpl;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.repository.UserRepository;
 import jakarta.validation.Valid;

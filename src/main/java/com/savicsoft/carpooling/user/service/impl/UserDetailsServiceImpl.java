@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.security.services;
+package com.savicsoft.carpooling.user.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

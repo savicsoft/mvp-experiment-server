@@ -28,4 +28,7 @@ public class CreateUserDTO {
     Car car;
     UserPreferences userPreferences;
     String pictureUrl;
+    String verificationCode;
+
+    boolean enabled;
 }
