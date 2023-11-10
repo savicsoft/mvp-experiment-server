@@ -24,6 +24,8 @@ import com.savicsoft.carpooling.user.repository.UserRepository;
 import com.savicsoft.carpooling.security.jwt.JwtUtils;
 import com.savicsoft.carpooling.security.services.UserDetailsImpl;
 
+import java.util.Date;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/auth")
@@ -65,7 +67,8 @@ public class AuthController {
 
         // Create new user's account
         User user = new User(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName(),
+                signUpRequest.getTel(), signUpRequest.getBirthDate(), signUpRequest.getCountry(), signUpRequest.getCity());
 
 
         userRepository.save(user);
