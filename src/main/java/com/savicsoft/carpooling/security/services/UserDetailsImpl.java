@@ -1,6 +1,9 @@
 package com.savicsoft.carpooling.security.services;
 
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,15 +11,16 @@ import com.savicsoft.carpooling.user.model.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
-
+@RequiredArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
 public class UserDetailsImpl implements UserDetails {
-    private static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
-    private Long id;
+    final Long id;
 
-    private String username;
+    final String username;
 
-    private String email;
+    final String email;
 
     @JsonIgnore
     private String password;

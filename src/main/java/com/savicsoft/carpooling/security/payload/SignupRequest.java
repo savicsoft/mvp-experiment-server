@@ -2,38 +2,40 @@ package com.savicsoft.carpooling.security.payload;
 
 
 import jakarta.validation.constraints.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
 
+@Data
+@RequiredArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
 public class SignupRequest {
 
-    @NotBlank
+    @NotNull
     @Email
-    private String email;
+    final String email;
 
-    @NotBlank
-    private String password;
+    @NotNull
+    final String password;
 
-    @NotBlank
-    private String firstName;
-    @NotBlank
-    private String lastName;
+    @NotNull
+    final String firstName;
+    @NotNull
+    final String lastName;
 
-    @NotBlank
-    private String tel;
+    @NotNull
+    final String tel;
 
-    private Date birthDate;
+    final Date birthDate;
 
-    @NotBlank
-    private String country;
+    @NotNull
+    final String country;
 
-    @NotBlank
-    private String city;
-
-    private Boolean driver;
-
-
-
+    @NotNull
+    final String city;
 
     public String getEmail() {
         return email;
