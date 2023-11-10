@@ -1,98 +1,86 @@
 package com.savicsoft.carpooling.user.model.entity;
 
+import com.savicsoft.carpooling.car.model.entity.Car;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import org.springframework.context.annotation.Bean;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.Collection;
 
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import org.springframework.context.annotation.Bean;
 @Data
+@FieldDefaults(level= AccessLevel.PRIVATE)
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="carpool_user",
-        uniqueConstraints = {
-            @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
-        })
-public class User {
-
+@Table(name="carpool_user")
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID uuid;
+    String email;
+    String password;
+    String firstName;
+    String lastName;
+    String tel;
+    Date birthDate;
+    String country;
+    String city;
+    @Column(name="is_driver")
+    boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Collection<Car> cars;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "car_id")
+//    private Car car;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_preferences_id")
+    UserPreferences userPreferences;
 
-    @NotBlank
-    @Size(max = 50)
-    private String username;
-
-    @NotBlank
-    @Size(max = 120)
-    private String password;
-
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    private String email;
-
-
-    public String randomUsername() {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
-        Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        System.out.println(generatedString);
-        return generatedString;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    String pictureUrl;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
-    public User(){
-
-    }
-    public User(String email, String password){
-        this.username = randomUsername();
-        this.password = password;
-        this.email = email;
-    }
-
-    public Long getId(){
-        return this.id;
-    }
-
-    public String getUsername(){
-        return this.username;
-    }
-
+    @Override
     public String getPassword(){
-        return this.password;
+        return password;
     }
 
-    public String getEmail(){
-        return this.email;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
