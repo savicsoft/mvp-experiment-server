@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name ="reviews")
+@Table(name ="review")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
