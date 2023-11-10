@@ -29,7 +29,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/cars")
+@RequestMapping("/api/v1/car")
 @RequiredArgsConstructor
 public class CarController {
 
