@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 public class JwtServiceTest {
 
     @Autowired

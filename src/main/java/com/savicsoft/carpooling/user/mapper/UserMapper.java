@@ -8,8 +8,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "car", ignore = true)
     UserDTO userToUserDTO(User user);
     @Mapping(target = "password", ignore = true)
+    @Mapping(target = "cars", ignore = true)
+    @Mapping(target = "role", ignore = true)
     User userDTOToUser (UserDTO dto);
     List<UserDTO> usersToUserDTOList(List<User> users);
     List<User> userDTOsToUserList(List<UserDTO> users);
