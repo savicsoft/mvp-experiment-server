@@ -51,7 +51,8 @@ public class User implements UserDetails {
     private Role role;
     String pictureUrl;
 
-    public User(String email, String password, String firstName, String lastName, String tel, Date birthDate, String country, String city) {
+    public User(String email, String password, String firstName, String lastName, String tel, Date birthDate, String country, String city
+    , Boolean isDriver) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -60,6 +61,8 @@ public class User implements UserDetails {
         this.birthDate = birthDate;
         this.country = country;
         this.city = city;
+        this.driver = isDriver;
+
 
     }
 

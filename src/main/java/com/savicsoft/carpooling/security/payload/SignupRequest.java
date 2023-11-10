@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.payload;
+package com.savicsoft.carpooling.security.payload;
 
 
 import jakarta.validation.constraints.*;
@@ -22,7 +22,6 @@ public class SignupRequest {
     @NotBlank
     private String tel;
 
-    @NotBlank
     private Date birthDate;
 
     @NotBlank
@@ -31,7 +30,7 @@ public class SignupRequest {
     @NotBlank
     private String city;
 
-
+    private Boolean driver;
 
 
 
@@ -52,6 +51,8 @@ public class SignupRequest {
 
     public String getTel(){return tel;}
 
+    public boolean getDriver() { return driver;}
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -68,6 +69,8 @@ public class SignupRequest {
     public void setBirthDate(Date birthDate){this.birthDate=birthDate;}
 
     public void setTel(String tel){this.tel = tel;}
+
+    public void setDriver (boolean driver){ this.driver = driver;}
 
     public String getPassword() {
         return password;
