@@ -23,7 +23,7 @@ create table car
 
 create table user_preferences
 (
-    id            BIGSERIAL PRIMARY KEY,
+    id       BIGSERIAL PRIMARY KEY,
     language      text not null,
     music         text not null,
     smoking       text not null,

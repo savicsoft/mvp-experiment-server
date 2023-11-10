@@ -6,7 +6,7 @@ import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -39,12 +39,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 import java.util.UUID;
 
-/*To sign up
-Send a POST request to {{URL}}/api/auth/signup with a JSON
-{username, password, email}
-To log in
-{{UR}}/login
-*/
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -57,6 +52,20 @@ public class SecurityConfig {
 
     final UserDetailsServiceImpl userDetailsService;
     final AuthEntryPointJwt unauthorizedHandler;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    String googleClientId;
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    String googleClientSecret;
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    String googleRedirectUri;
+    @Value("${spring.security.oauth2.client.registration.facebook.client-id}")
+    String facebookClientId;
+    @Value(("${spring.security.oauth2.client.registration.facebook.client-secret}"))
+    String facebookClientSecret;
+    @Value("${spring.security.oauth2.client.registration.facebook.redirect-uri}")
+    String facebookRedirectUri;
+
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -82,9 +91,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /* To create new accepted endpoints change .autorizeHttpRequests( ,requestMatchers()
-    * There are conflicts with Oauth2, so one way is to call anonymous() also
-    * It can't be called again so it need to be changed in this Bean*/
+
     @Bean
     @Order(1)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
@@ -98,8 +105,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                         .requestMatchers("/api/auth/signup").anonymous()
                         .anyRequest().authenticated()
-
-
                 )
                 .oauth2Login(Customizer.withDefaults())
 
@@ -121,15 +126,12 @@ public class SecurityConfig {
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
         http
-                // Redirect to the OAuth 2.0 Login endpoint when not authenticated
-                // from the authorization endpoint
                 .exceptionHandling((exceptions) -> exceptions
                         .defaultAuthenticationEntryPointFor(
                                 new LoginUrlAuthenticationEntryPoint("/oauth2/authorization/my-clie"),
                                 new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                         )
                 )
-                // Accept access tokens for User Info and/or Client Registration
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
@@ -157,11 +159,11 @@ public class SecurityConfig {
         }
         private ClientRegistration googleClientRegistration () {
             return ClientRegistration.withRegistrationId("google")
-                    .clientId("358759268020-2nobses99s0vl397r5mhvpo610328fjt.apps.googleusercontent.com")
-                    .clientSecret("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")
+                    .clientId(googleClientId)
+                    .clientSecret(googleClientSecret)
                     .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                    .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+                    .redirectUri(googleRedirectUri)
                     .scope("openid", "profile", "email", "address", "phone")
                     .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
                     .tokenUri("https://www.googleapis.com/oauth2/v4/token")
@@ -174,12 +176,12 @@ public class SecurityConfig {
 
         private ClientRegistration facebookClientRegistration () {
             return ClientRegistration.withRegistrationId("facebook")
-                    .clientId("328784993078427")
-                    .clientSecret("e9d57cdff045e75dcb0f3c96e62e5160")
+                    .clientId(facebookClientId)
+                    .clientSecret(facebookClientSecret)
                     .scope("public_profile", "email")
                     .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                    .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+                    .redirectUri(facebookRedirectUri)
                     .authorizationUri("https://www.facebook.com/v2.8/dialog/oauth")
                     .tokenUri("https://graph.facebook.com/v2.8/oauth/access_token")
                     .userInfoUri("https://graph.facebook.com/me?fields=id,name,email")
