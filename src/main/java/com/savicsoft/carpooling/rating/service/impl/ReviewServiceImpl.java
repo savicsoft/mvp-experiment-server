@@ -5,6 +5,7 @@ import com.savicsoft.carpooling.rating.models.entity.Review;
 import com.savicsoft.carpooling.rating.models.mapper.ReviewMapper;
 import com.savicsoft.carpooling.rating.repository.ReviewRepository;
 import com.savicsoft.carpooling.rating.service.ReviewService;
+import com.savicsoft.carpooling.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,29 +41,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteReview(Long id) {
         Optional<Review> review = reviewRepository.findById(id);
-
         if(review.isPresent()){
             reviewRepository.deleteById(id);
         }
-
     }
 
     @Override
     public List<ReviewDTO> getAllReviewsByUserId(Long id) {
-        return null;
-    }
-
-    @Override
-    public ReviewDTO getReviewByUserId(Long id) {
-        return null;
+        Optional<List<Review>> reviews = reviewRepository.findAllByUserId(id);
+        return reviews.map(reviewMapper::reviewListToReviewDTOList).orElse(null);
     }
 
     @Override
     public ReviewDTO getReviewById(Long id) {
         Optional<Review> review = reviewRepository.findById(id);
-
         return review.map(reviewMapper::reviewToReviewDTO).orElse(null);
     }
 
@@ -74,6 +68,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewDTO getReviewByUuid(UUID uuid) {
-        return null;
+        Optional<Review> reviewOptional = reviewRepository.findByUuid(uuid);
+        return reviewOptional.map(reviewMapper::reviewToReviewDTO).orElse(null);
     }
 }
