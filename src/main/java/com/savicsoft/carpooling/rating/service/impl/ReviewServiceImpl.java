@@ -5,13 +5,11 @@ import com.savicsoft.carpooling.rating.models.entity.Review;
 import com.savicsoft.carpooling.rating.models.mapper.ReviewMapper;
 import com.savicsoft.carpooling.rating.repository.ReviewRepository;
 import com.savicsoft.carpooling.rating.service.ReviewService;
-import com.savicsoft.carpooling.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 @Service
 @AllArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -66,9 +64,4 @@ public class ReviewServiceImpl implements ReviewService {
        return reviewMapper.reviewListToReviewDTOList(reviews);
     }
 
-    @Override
-    public ReviewDTO getReviewByUuid(UUID uuid) {
-        Optional<Review> reviewOptional = reviewRepository.findByUuid(uuid);
-        return reviewOptional.map(reviewMapper::reviewToReviewDTO).orElse(null);
-    }
 }
