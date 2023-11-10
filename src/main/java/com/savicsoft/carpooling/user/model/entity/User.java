@@ -65,7 +65,6 @@ public class User implements UserDetails {
         this.city = city;
         this.driver = isDriver;
 
-
     }
 
     @Override

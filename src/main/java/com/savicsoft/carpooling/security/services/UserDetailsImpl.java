@@ -23,15 +23,8 @@ public class UserDetailsImpl implements UserDetails {
     final String email;
 
     @JsonIgnore
-    private String password;
+    final String password;
 
-
-    public UserDetailsImpl(Long id, String username, String email, String password){
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 
     public static UserDetailsImpl build(User user) {
 

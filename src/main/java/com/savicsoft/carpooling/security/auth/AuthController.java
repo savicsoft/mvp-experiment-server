@@ -58,7 +58,13 @@ public class AuthController {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
-
+        // Create default preferences for the user
+        UserPreferences preferences = UserPreferences.builder()
+                .language("English")
+                .smoking("No smoking")
+                .communication("No communication")
+                .music("No music")
+                .build();
         // Create new user's account
         var user = User.builder()
                 .uuid(UUID.randomUUID())
