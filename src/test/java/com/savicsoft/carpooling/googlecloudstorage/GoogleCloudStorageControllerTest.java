@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @TestPropertySource("/application.properties")
 class GoogleCloudStorageControllerTest {
+
     private final GoogleCloudStorageService storageService = mock(GoogleCloudStorageService.class);
     private final GoogleCloudStorageController storageController = new GoogleCloudStorageController(storageService);
 

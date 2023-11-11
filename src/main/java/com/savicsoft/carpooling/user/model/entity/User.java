@@ -51,21 +51,6 @@ public class User implements UserDetails {
     private Role role;
     String pictureUrl;
 
-    public User(UUID uuid, String email, String password, String firstName, String lastName, String tel, Date birthDate, String country, String city
-    , Boolean isDriver) {
-        this.uuid = uuid;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.tel = tel;
-        this.birthDate = birthDate;
-        this.country = country;
-        this.city = city;
-        this.driver = isDriver;
-
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

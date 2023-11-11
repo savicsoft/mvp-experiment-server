@@ -43,8 +43,8 @@ class GoogleCloudStorageServiceTest {
 
         Blob uploadBlob = storageService.uploadFile(mockFile, "test-file.jpg", UUID.randomUUID());
 
-        assertEquals(uploadBlob.getContentType(), mockFile.getContentType());
-        assertArrayEquals(uploadBlob.getContent(), mockFile.getBytes());
+        assertEquals(uploadBlob.getContentType(),mockFile.getContentType());
+        assertArrayEquals(uploadBlob.getContent(),mockFile.getBytes());
     }
 
     @Test
@@ -78,7 +78,7 @@ class GoogleCloudStorageServiceTest {
     @Test
     void testDeleteFile() throws IOException {
         MultipartFile mockFile = Mockito.mock(MultipartFile.class);
-        storageService.uploadFile(mockFile, "test-file.jpg", UUID.randomUUID());
+        storageService.uploadFile(mockFile,"test-file.jpg", UUID.randomUUID());
 
         assertEquals(false, storageService.deleteFile("some-file.jpg"));
         assertEquals(true, storageService.deleteFile("test-file.jpg"));
