@@ -1,7 +1,7 @@
 drop table if exists carpool_user;
 create table carpool_user
 (
-    id             BIGSERIAL PRIMARY KEY,
+    id                  BIGSERIAL PRIMARY KEY,
     uuid                uuid      not null,
     email               text      not null,
     password            text      not null,
@@ -23,7 +23,7 @@ create table car
 
 create table user_preferences
 (
-    id       BIGSERIAL PRIMARY KEY,
+    id            BIGSERIAL PRIMARY KEY,
     language      text not null,
     music         text not null,
     smoking       text not null,
