@@ -8,14 +8,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.Collection;
 
 
 @Data
-@FieldDefaults(level= AccessLevel.PRIVATE)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,28 +23,30 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID uuid;
-    String email;
-    String password;
-    String firstName;
-    String lastName;
-    String tel;
-    Date birthDate;
-    String country;
-    String city;
+    private UUID uuid;
+    private String email;
+    private String password;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+    private String country;
+    private String city;
     @Column(name="is_driver")
-    boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
+    private boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Car> cars;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "car_id")
-//    private Car car;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
-    UserPreferences userPreferences;
+    private UserPreferences userPreferences;
 
     @Enumerated(EnumType.STRING)
     private Role role;

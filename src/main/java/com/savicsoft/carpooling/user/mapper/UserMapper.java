@@ -1,5 +1,6 @@
 package com.savicsoft.carpooling.user.mapper;
 
+import com.savicsoft.carpooling.user.dto.CreateUserDTO;
 import com.savicsoft.carpooling.user.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,6 +15,8 @@ public interface UserMapper {
     @Mapping(target = "cars", ignore = true)
     @Mapping(target = "role", ignore = true)
     User userDTOToUser (UserDTO dto);
+    CreateUserDTO userToCreateUserDTO(User user);
+    User createUserDTOToUser(CreateUserDTO dto);
     List<UserDTO> usersToUserDTOList(List<User> users);
     List<User> userDTOsToUserList(List<UserDTO> users);
 
