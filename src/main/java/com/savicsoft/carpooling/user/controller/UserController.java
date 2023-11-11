@@ -1,5 +1,6 @@
 package com.savicsoft.carpooling.user.controller;
 
+import com.savicsoft.carpooling.user.dto.CreateUserDTO;
 import com.google.cloud.storage.Blob;
 import com.savicsoft.carpooling.domain.HttpResponse;
 import com.savicsoft.carpooling.domain.ImageUploadForm;
@@ -10,16 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.savicsoft.carpooling.user.model.entity.User;
 
-//Exception Handling not implemented yet!
 @RequestMapping("/api/v1/users")
 @RestController
 @RequiredArgsConstructor
@@ -46,17 +44,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody User user){ //Receive a RequestBody with Form?
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO userDTO){ //Receive a RequestBody with Form?
 
-        UserDTO createdUser = service.createUser(user);
+        UserDTO createdUser = service.createUser(userDTO);
 
         return ResponseEntity.ok(createdUser);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id){ //Receive RequestBody with Form or DTO instead Long?
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){ //Receive RequestBody with Form or DTO instead Long?
 
-        UserDTO updatedUser = service.updateUser(id);
+        UserDTO updatedUser = service.updateUser(userDTO);
 
         return ResponseEntity.ok(updatedUser);
     }

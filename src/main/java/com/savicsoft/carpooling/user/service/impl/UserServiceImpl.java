@@ -1,18 +1,23 @@
 package com.savicsoft.carpooling.user.service.impl;
 
 import com.savicsoft.carpooling.user.dto.UserDTO;
+import com.savicsoft.carpooling.user.dto.CreateUserDTO;
+import com.savicsoft.carpooling.user.exception.CouldNotCreateUserException;
+import com.savicsoft.carpooling.user.exception.CouldNotUpdateUserException;
+import com.savicsoft.carpooling.user.exception.UserDataAccessException;
+import com.savicsoft.carpooling.user.exception.UserNotFoundException;
+import com.savicsoft.carpooling.user.exception.CouldNotDeleteUserException;
 import com.savicsoft.carpooling.user.mapper.UserMapper;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.repository.UserRepository;
 import com.savicsoft.carpooling.user.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-//Exception Handling not implemented yet!
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -22,19 +27,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
 
-        List<User> users = userRepository.findAll();
+        try{
+            List<User> users = userRepository.findAll();
 
-        return userMapper.usersToUserDTOList(users);
+            return userMapper.usersToUserDTOList(users);
+
+        }catch (DataAccessException e){
+
+            throw new UserDataAccessException("Internal Error. Could not access user registers");
+
+        }
+
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
+    public UserDTO getUserById(Long id){
 
         Optional<User> userOptional = userRepository.findById(id);
 
         if (userOptional.isEmpty()) {
 
-            return null;
+            throw new UserNotFoundException("User doesn't exist for ID: " + id +
+                    ". Please, check the entered input");
 
         } else {
 
@@ -44,25 +58,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(User user) {//Receive a RequestBody with a form?
-        //Pending exception handling
-        userRepository.save(user);
+    public UserDTO createUser(CreateUserDTO userDTO) {
 
-        return userMapper.userToUserDTO(user);
+        User user = userMapper.createUserDTOToUser(userDTO);
+
+        try{
+            userRepository.save(user);
+
+            return userMapper.userToUserDTO(user);
+
+        }catch (DataAccessException dae){
+
+            throw new CouldNotCreateUserException("Internal Error. Could not create a new user.");
+
+        }
+
     }
 
 
     @Override
-    public UserDTO updateUser(Long id) { //Receive parameter form or DTO instead of Long?
+    public UserDTO updateUser(UserDTO userDTO) { //Receive parameter form or DTO instead of Long?
+
+        Long id = userDTO.getId();
         Optional<User> userOptional = userRepository.findById(id);
 
         if(userOptional.isEmpty()){
-            return null;
+            throw new UserNotFoundException("User doesn't exist for ID: " + id +
+                    ". Please, check the entered input");
         }
 
-        User user = userRepository.save(userOptional.get());
+        try{
+            User user = userRepository.save(userOptional.get());
 
-        return userMapper.userToUserDTO(userOptional.get());
+            return userMapper.userToUserDTO(user);
+
+        }catch(DataAccessException e ){
+
+            throw new CouldNotUpdateUserException(
+                    "Internal Error. Could not apply the requested changes");
+        }
 
     }
 
@@ -72,12 +106,19 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
 
         if(userOptional.isEmpty()){
-            return null;
+            throw new UserNotFoundException("User does not exist for ID: "+ id +
+                    ". Please, check the entered input");
         }
 
-        userRepository.deleteById(id);
+        try{
+            userRepository.deleteById(id);
 
-        return userMapper.userToUserDTO(userOptional.get());
+            return userMapper.userToUserDTO(userOptional.get());
+
+        }catch(DataAccessException e){
+            throw new CouldNotDeleteUserException("Internal Error. Could not delete the user register");
+        }
+
     }
 
    @Override

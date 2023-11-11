@@ -1,23 +1,9 @@
-# Use the official Gradle image as the build environment
-FROM gradle:jdk17-graal as build
-
-# Set working directory
-WORKDIR /app
-
-# Copy your source code and build files to the image
-COPY . .
-
-# Use Gradle to build the application
-RUN gradle clean build -x test
-
-# Use the Eclipse Temurin 17 image as the runtime environment
 FROM eclipse-temurin:17
 
 LABEL maintainer="sergienkoyura5@gmail.com"
 
 WORKDIR /app
 
-# Copy the built JAR file from the build image to the current image
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY build/libs/carpooling-0.0.1-SNAPSHOT.jar /app/application.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "application.jar"]
