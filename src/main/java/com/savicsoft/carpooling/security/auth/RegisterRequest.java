@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     private String email;
     private String password;
-    private String firstName;
+   /* private String firstName;
     private String lastName;
     // for date builder
     private int year;
@@ -26,5 +26,5 @@ public class RegisterRequest {
     private String language;
     private String music;
     private String smoking;
-    private String communication;
+    private String communication;*/
 }
