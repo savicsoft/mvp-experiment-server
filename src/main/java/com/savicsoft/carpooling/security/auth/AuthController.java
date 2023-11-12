@@ -23,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-
+//We may need change the sign up request if more features are added
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/auth")
