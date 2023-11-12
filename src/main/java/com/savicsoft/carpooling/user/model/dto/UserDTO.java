@@ -1,14 +1,8 @@
-package com.savicsoft.carpooling.user.dto;
+package com.savicsoft.carpooling.user.model.dto;
 
-import com.savicsoft.carpooling.car.model.entity.Car;
-import com.savicsoft.carpooling.user.model.entity.Role;
-import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -27,8 +21,7 @@ public class UserDTO {
     private String city;
     //if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
     private boolean driver;
-    private Collection<Car> cars;
-    private UserPreferences userPreferences;
-    private Role role;
+    private int carsCount;
+    private int user_preferences_id;
     private String pictureUrl;
 }

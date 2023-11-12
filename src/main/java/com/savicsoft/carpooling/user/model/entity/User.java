@@ -47,13 +47,10 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
     private UserPreferences userPreferences;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
     String pictureUrl;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("USER"));
     }
     @Override
     public String getPassword(){
