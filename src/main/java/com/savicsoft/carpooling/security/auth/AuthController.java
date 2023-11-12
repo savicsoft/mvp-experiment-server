@@ -76,7 +76,6 @@ public class AuthController {
                 .country(signUpRequest.getCountry())
                 .city(signUpRequest.getCity())
                 .driver(!signUpRequest.getDriver())
-                .tel(signUpRequest.getTel())
                 .userPreferences(preferences)
                 .role(Role.USER)
                 .build();

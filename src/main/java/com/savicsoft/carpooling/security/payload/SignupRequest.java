@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -26,10 +27,8 @@ public class SignupRequest {
     @NotNull
     final String lastName;
 
-    @NotNull
-    final String tel;
 
-    final Date birthDate;
+    final LocalDate birthDate;
 
     @NotNull
     final String country;
