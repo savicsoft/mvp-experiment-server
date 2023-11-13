@@ -100,13 +100,20 @@ public class SecurityConfig {
                 .anonymous(Customizer.withDefaults())
                 .formLogin(fl-> fl.usernameParameter("email"))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/api/v1/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                        /*.requestMatchers("/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                         .requestMatchers("/api/auth/signup").anonymous()
                         .anyRequest().authenticated()
                 )
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(Customizer.withDefaults())*/
 
                 .cors(cors-> cors.disable())
                         .logout(l-> l.logoutSuccessUrl("/")

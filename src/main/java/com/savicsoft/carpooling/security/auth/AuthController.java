@@ -5,7 +5,6 @@ import com.savicsoft.carpooling.security.payload.LoginRequest;
 import com.savicsoft.carpooling.security.payload.MessageResponse;
 import com.savicsoft.carpooling.security.payload.SignupRequest;
 import com.savicsoft.carpooling.security.services.UserDetailsImpl;
-import com.savicsoft.carpooling.user.model.entity.Role;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import com.savicsoft.carpooling.user.repository.UserPreferencesRepository;
@@ -77,7 +76,6 @@ public class AuthController {
                 .city(signUpRequest.getCity())
                 .driver(!signUpRequest.getDriver())
                 .userPreferences(preferences)
-                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
