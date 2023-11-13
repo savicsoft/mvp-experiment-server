@@ -5,7 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.storage.*;
 
-import lombok.RequiredArgsConstructor;
+import com.savicsoft.carpooling.googlecloudstorage.adapter.MultipartFileAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,8 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class GoogleCloudStorageService {
@@ -69,5 +72,12 @@ public class GoogleCloudStorageService {
         }
 
         return storage.get(bucketName, fileName);
+    }
+
+    public List<MultipartFile> downloadFiles(String prefix) {
+        Iterable<Blob> blobs = storage.list(bucketName, Storage.BlobListOption.prefix(prefix)).iterateAll();
+        return StreamSupport.stream(blobs.spliterator(), false)
+                .map(MultipartFileAdapter::new)
+                .collect(Collectors.toList());
     }
 }
