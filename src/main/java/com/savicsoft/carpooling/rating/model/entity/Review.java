@@ -1,14 +1,12 @@
-package com.savicsoft.carpooling.rating.model;
+package com.savicsoft.carpooling.rating.model.entity;
 
-import com.savicsoft.carpooling.rating.enumeration.RatingType;
+import com.savicsoft.carpooling.rating.model.enumeration.ReviewType;
 import com.savicsoft.carpooling.user.model.entity.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.checkerframework.common.aliasing.qual.Unique;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,8 +26,8 @@ List of Ratings(
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rating")
-public class Rating {
+@Table(name = "review")
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,22 +36,20 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @NotNull(message = "User field must be filled appropriately")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "rated_user_id")
+    private User ratedUser;
 
-    @NotNull(message = "Rating must be added")
     private double rating;
     private String comment;
     private LocalDateTime date;
     private boolean anonymous;
 
-    @NotNull(message = "Rating user field must be filled appropriately")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rating_user_id")
-    private User ratingUser;
+    @JoinColumn(name = "rater_user_id")
+    private User raterUser;
 
+    // rated user is a ...
     @Enumerated(EnumType.STRING)
-    private RatingType ratingType;
+    private ReviewType reviewType;
 }

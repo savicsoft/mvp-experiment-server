@@ -1,11 +1,10 @@
 package com.savicsoft.carpooling.user.controller;
 
-import com.savicsoft.carpooling.user.dto.CreateUserDTO;
 import com.google.cloud.storage.Blob;
-import com.savicsoft.carpooling.domain.HttpResponse;
 import com.savicsoft.carpooling.domain.ImageUploadForm;
 import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
-import com.savicsoft.carpooling.user.dto.UserDTO;
+import com.savicsoft.carpooling.user.model.dto.CreateUserDTO;
+import com.savicsoft.carpooling.user.model.dto.UserDTO;
 import com.savicsoft.carpooling.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -67,7 +66,7 @@ public class UserController {
         return ResponseEntity.ok(deletedUser);
     }
 
-    @PostMapping("/{userUUID}/upload-profile-pic")
+    /*@PostMapping("/{userUUID}/upload-profile-pic")
     public ResponseEntity<HttpResponse> uploadProfilePicture(@PathVariable UUID userUUID, @RequestBody ImageUploadForm userImageForm) {
 
         if (service.getUserByUuid(userUUID).getPictureUrl() != null) {
@@ -108,5 +107,5 @@ public class UserController {
                                     .build()
                     );
         }
-    }
+    }*/
 }
