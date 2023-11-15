@@ -4,10 +4,13 @@ import com.savicsoft.carpooling.user.model.dto.CreateUserDTO;
 import com.savicsoft.carpooling.user.model.dto.UserDTO;
 import org.mapstruct.Mapper;
 import com.savicsoft.carpooling.user.model.entity.User;
+import org.mapstruct.factory.Mappers;
+
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
     //@Mapping(target = "car", ignore = true)
     UserDTO userToUserDTO(User user);
     /*@Mapping(target = "password", ignore = true)
