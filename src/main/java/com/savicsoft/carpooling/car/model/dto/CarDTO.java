@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,10 +16,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CarDTO {
     private UUID uuid;
-    private User user;
+    private UUID userUuid;
     private String registrationNumber;
     private String color;
     private int year;
     private FuelType fuelType;
-    private List<String> pictureUrl;
+    private double fuelEfficiency;
+    private List<MultipartFile> pictures;
 }

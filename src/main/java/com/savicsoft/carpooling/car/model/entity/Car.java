@@ -38,8 +38,7 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
     private double fuelEfficiency;
-    @ElementCollection
-    private List<String> pictureUrl;
+    private int numOfPics;
 }
 
 
