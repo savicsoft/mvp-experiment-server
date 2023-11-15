@@ -10,6 +10,7 @@ public interface UserService {
 
     List<UserDTO> getAllUsers();
     UserDTO getUserById(Long id);
+    UserDTO getUserByEmail(String email);
     UserDTO createUser(CreateUserDTO userDTO);
     UserDTO updateUser(UserDTO userDTO);
     UserDTO deleteUser(Long id);

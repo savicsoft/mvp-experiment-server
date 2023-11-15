@@ -47,6 +47,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUserByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("User doesn't exist for username: " + email + ". Please, check the entered input");
+        } else {
+            return userMapper.userToUserDTO(userOptional.get());
+        }
+    }
+
+    @Override
     public UserDTO createUser(CreateUserDTO userDTO) {
         User user = userMapper.createUserDTOToUser(userDTO);
         try {
@@ -56,7 +66,6 @@ public class UserServiceImpl implements UserService {
             throw new CouldNotCreateUserException("Internal Error. Could not create a new user.");
         }
     }
-
 
     @Override
     public UserDTO updateUser(UserDTO userDTO) { //Receive parameter form or DTO instead of Long?
