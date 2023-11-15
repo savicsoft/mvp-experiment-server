@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.car.dto;
+package com.savicsoft.carpooling.car.model.dto;
 
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;

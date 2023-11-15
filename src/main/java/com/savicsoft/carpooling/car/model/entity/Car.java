@@ -23,13 +23,14 @@ import java.util.UUID;
 @Table(name="car")
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private UUID uuid;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id") //
     private User user;
+    private String mark;
+    private String model;
     @Unique
     @NotEmpty(message = "Registration number must be added")
     private String registrationNumber;

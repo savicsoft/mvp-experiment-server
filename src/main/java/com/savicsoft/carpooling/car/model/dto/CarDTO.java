@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.car.dto;
+package com.savicsoft.carpooling.car.model.dto;
 
 import com.savicsoft.carpooling.car.enumeration.FuelType;
 import com.savicsoft.carpooling.user.model.entity.User;
@@ -15,8 +15,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarDTO {
-    private UUID uuid;
-    private UUID userUuid;
+    private UUID id;
+    private UUID userId;
+    private String mark;
+    private String model;
     private String registrationNumber;
     private String color;
     private int year;
