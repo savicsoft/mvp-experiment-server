@@ -48,6 +48,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_preferences_id")
     private UserPreferences userPreferences;
     String pictureUrl;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
