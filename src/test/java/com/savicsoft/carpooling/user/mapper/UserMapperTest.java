@@ -1,6 +1,7 @@
 package com.savicsoft.carpooling.user.mapper;
 
-import com.savicsoft.carpooling.user.dto.UserDTO;
+import com.savicsoft.carpooling.user.model.dto.UserDTO;
+import com.savicsoft.carpooling.user.model.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -8,7 +9,6 @@ import com.savicsoft.carpooling.user.model.entity.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

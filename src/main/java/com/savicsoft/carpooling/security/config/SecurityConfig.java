@@ -100,6 +100,10 @@ public class SecurityConfig {
                 .anonymous(Customizer.withDefaults())
                 .formLogin(fl-> fl.usernameParameter("email"))
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/api/v1/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
@@ -133,7 +137,6 @@ public class SecurityConfig {
                         )
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
-
         return http.build();
     }
 

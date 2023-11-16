@@ -1,12 +1,9 @@
 package com.savicsoft.carpooling.user.service;
 
-import com.savicsoft.carpooling.user.dto.CreateUserDTO;
-import com.savicsoft.carpooling.user.dto.UserDTO;
-import com.savicsoft.carpooling.user.exception.UserNotFoundException;
-import com.savicsoft.carpooling.user.model.entity.User;
+import com.savicsoft.carpooling.user.model.dto.CreateUserDTO;
+import com.savicsoft.carpooling.user.model.dto.UserDTO;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
