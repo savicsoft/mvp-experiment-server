@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import com.savicsoft.carpooling.user.model.entity.User;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +33,7 @@ class UserMapperTest {
                 .firstName("John")
                 .lastName("Doe")
                 .phoneNumber("123456789")
-                .birthDate(LocalDate.of(1990,1,1))
+                .birthDate(new Date())
                 .country("USA")
                 .city("New York")
                 .driver(true)

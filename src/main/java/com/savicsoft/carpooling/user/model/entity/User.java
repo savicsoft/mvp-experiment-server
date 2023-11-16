@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "birth_date")
-    private LocalDate birthDate;
+    private Date birthDate;
     private String country;
     private String city;
     @Column(name="is_driver")

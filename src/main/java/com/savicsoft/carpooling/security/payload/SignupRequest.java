@@ -7,12 +7,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data
 @RequiredArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
+// ready to be removed
 public class SignupRequest {
 
     @NotNull
@@ -28,7 +28,7 @@ public class SignupRequest {
     final String lastName;
 
 
-    final LocalDate birthDate;
+    final Date birthDate;
 
     @NotNull
     final String country;
