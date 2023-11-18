@@ -161,10 +161,10 @@ public class CarController {
             responseCode = "200",
             description = "HTTP Status: 200 -> Success"
     )
-    @PostMapping(value = "/{carId}/pictures")
+    @PostMapping(value = "/{carId}/pictures", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CarDTO> uploadCarPictures(@RequestHeader("Authorization") String authorizationHeader,
                                                     @PathVariable UUID carId,
-                                                    @RequestAttribute List<MultipartFile> pictures) {
+                                                    @RequestParam List<MultipartFile> pictures) {
 
         UserDTO userDTO = getAuthorizedUserDTO(authorizationHeader);
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
@@ -199,7 +199,7 @@ public class CarController {
     @DeleteMapping(value = "/{carId}/pictures")
     public ResponseEntity<CarDTO> deleteCarPictures(@RequestHeader("Authorization") String authorizationHeader,
                                                     @PathVariable UUID carId,
-                                                    @RequestAttribute List<String> fileNames) {
+                                                    @RequestParam("file names") List<String> fileNames) {
 
         UserDTO userDTO = getAuthorizedUserDTO(authorizationHeader);
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
