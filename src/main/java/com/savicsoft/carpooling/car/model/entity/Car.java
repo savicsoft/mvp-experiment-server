@@ -23,13 +23,13 @@ import java.util.UUID;
 @Table(name="car")
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") //
+    @JoinColumn(name = "user_id")
     private User user;
+    private String mark;
+    private String model;
     @Unique
     @NotEmpty(message = "Registration number must be added")
     private String registrationNumber;
@@ -38,8 +38,7 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
     private double fuelEfficiency;
-    @ElementCollection
-    private List<String> pictureUrl;
+    private int numOfPics;
 }
 
 
