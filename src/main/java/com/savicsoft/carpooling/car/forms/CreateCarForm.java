@@ -1,6 +1,5 @@
 package com.savicsoft.carpooling.car.forms;
 
-import com.savicsoft.carpooling.car.enumeration.FuelType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class CarForm {
+public class CreateCarForm {
     @NotEmpty(message = "Registration number cannot be empty")
     private String registrationNumber;
     @NotEmpty(message = "Color cannot be empty")
