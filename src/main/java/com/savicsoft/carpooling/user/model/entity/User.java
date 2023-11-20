@@ -22,10 +22,8 @@ import java.util.Collection;
 @Table(name="carpool_user")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
     private String email;
     private String password;
     @Column(name = "first_name")
