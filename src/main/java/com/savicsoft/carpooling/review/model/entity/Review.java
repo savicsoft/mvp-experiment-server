@@ -1,6 +1,6 @@
-package com.savicsoft.carpooling.rating.model.entity;
+package com.savicsoft.carpooling.review.model.entity;
 
-import com.savicsoft.carpooling.rating.model.enumeration.ReviewType;
+import com.savicsoft.carpooling.review.model.enumeration.ReviewType;
 import com.savicsoft.carpooling.user.model.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,13 +28,9 @@ List of Ratings(
 @Entity
 @Table(name = "review")
 public class Review {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rated_user_id")
