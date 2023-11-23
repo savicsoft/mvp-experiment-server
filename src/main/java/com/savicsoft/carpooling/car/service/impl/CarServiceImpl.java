@@ -8,8 +8,7 @@ import com.savicsoft.carpooling.exception.CouldNotCreateException;
 import com.savicsoft.carpooling.car.model.entity.Car;
 import com.savicsoft.carpooling.car.repository.CarRepository;
 import com.savicsoft.carpooling.car.service.CarService;
-import com.savicsoft.carpooling.user.exception.UserNotFoundException;
-import com.savicsoft.carpooling.car.forms.UpdateCarInfoForm;
+import com.savicsoft.carpooling.car.model.form.UpdateCarInfoForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -24,10 +23,10 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
 
     @Override
-    public List<CarDTO> getAllCarsOfUser(UUID userId) {
-        Optional<List<Car>> carsOptional = carRepository.findAllByUserId(userId);
+    public List<CarDTO> getAllCarsOfUser(UUID uuid) {
+        Optional<List<Car>> carsOptional = carRepository.findAllByUserId(uuid);
         if (carsOptional.isEmpty())
-            throw new UserNotFoundException("User does not exist for UUID: " + userId + ". Please, check the entered input");
+            throw new NotFoundException("User does not exist for UUID: " + uuid + ". Please, check the entered input");
         return CarDTOMapper.INSTANCE.mapToCarDTOList(carsOptional.get());
     }
 
@@ -50,7 +49,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDTO updateCarInfo(UUID carId, UpdateCarInfoForm car) {
+    public CarDTO updateCar(UUID carId, UpdateCarInfoForm car) {
         Optional<Car> existingCarOptional = carRepository.findCarById(carId);
         if (existingCarOptional.isEmpty()) {
             throw new NotFoundException("Car does not exist for UUID: " + carId);

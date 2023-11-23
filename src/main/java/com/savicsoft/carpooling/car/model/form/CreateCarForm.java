@@ -1,28 +1,29 @@
-package com.savicsoft.carpooling.car.forms;
+package com.savicsoft.carpooling.car.model.form;
 
+import com.savicsoft.carpooling.car.enumeration.FuelType;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 public class CreateCarForm {
+    private String mark;
+    private String model;
     @NotEmpty(message = "Registration number cannot be empty")
     private String registrationNumber;
-    @NotEmpty(message = "Color cannot be empty")
     private String color;
-    @NotNull(message = "Year cannot be empty")
     private int year;
     @NotNull(message = "Fuel efficiency cannot be empty")
     private double fuelEfficiency;
-    @NotNull(message = "User id cannot be empty")
-    private UUID userUUID;
     @NotEmpty(message = "Fuel type cannot be empty")
-    private String fuelType;
-    private List<String> pictureUrl;
-
+    private FuelType fuelType;
+    @ArraySchema(minItems = 0, maxItems = 5, schema = @Schema(type = "string", format = "binary"))
+    private List<MultipartFile> pictures;
 }
