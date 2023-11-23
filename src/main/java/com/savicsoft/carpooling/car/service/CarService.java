@@ -1,6 +1,6 @@
 package com.savicsoft.carpooling.car.service;
 
-import com.savicsoft.carpooling.car.forms.UpdateCarInfoForm;
+import com.savicsoft.carpooling.car.model.form.UpdateCarInfoForm;
 import com.savicsoft.carpooling.car.model.dto.CarDTO;
 import com.savicsoft.carpooling.car.model.entity.Car;
 
