@@ -5,7 +5,6 @@ import com.savicsoft.carpooling.security.payload.LoginRequest;
 import com.savicsoft.carpooling.security.payload.MessageResponse;
 import com.savicsoft.carpooling.security.payload.SignupRequest;
 import com.savicsoft.carpooling.security.services.UserDetailsImpl;
-import com.savicsoft.carpooling.user.model.entity.Role;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import com.savicsoft.carpooling.user.repository.UserPreferencesRepository;
@@ -67,7 +66,7 @@ public class AuthController {
                 .build();
         // Create new user's account
         var user = User.builder()
-                .uuid(UUID.randomUUID())
+                .id(UUID.randomUUID())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .firstName(signUpRequest.getFirstName())
@@ -76,9 +75,8 @@ public class AuthController {
                 .country(signUpRequest.getCountry())
                 .city(signUpRequest.getCity())
                 .driver(!signUpRequest.getDriver())
-                .tel(signUpRequest.getTel())
+                .phoneNumber(signUpRequest.getTel())
                 .userPreferences(preferences)
-                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
