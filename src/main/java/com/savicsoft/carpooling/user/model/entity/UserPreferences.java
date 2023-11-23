@@ -18,13 +18,17 @@ public class UserPreferences {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name = "language")
     private String language;
+
+    @Column(name = "music")
     private String music;
+
+    @Column(name = "smoking")
     private String smoking;
+
+    @Column(name = "communication")
     private String communication;
 
-    //bi-directional one-to-one
-    @OneToOne (mappedBy = "userPreferences", cascade =
-            {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private User user;
 }
