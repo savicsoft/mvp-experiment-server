@@ -3,7 +3,6 @@ package com.savicsoft.carpooling.user.model.entity;
 import com.savicsoft.carpooling.car.model.entity.Car;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
     @Column(name = "first_name")
     private String firstName;
@@ -34,18 +35,24 @@ public class User implements UserDetails {
     private String phoneNumber;
     @Column(name = "birth_date")
     private LocalDate birthDate;
+    @Column(name="country")
     private String country;
+    @Column(name="city")
     private String city;
     @Column(name="is_driver")
     private boolean driver;//if this attribute's name == `isDriver`, Lombok generates an `isDriver` getter and `setDriver` setter, causing problems with MapStruct
 
+    @Column(name="has_picture")
+    private boolean picture;
+
+    @Column(name="rating")
+    private double rating;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Car> cars;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_preferences_id")
     private UserPreferences userPreferences;
-    String pictureUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
