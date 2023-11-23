@@ -11,7 +11,7 @@ public interface CarService {
     List<CarDTO> getAllCarsOfUser(UUID uuid);
     CarDTO getCarById(UUID uuid);
     CarDTO createCar(Car car);
-    CarDTO updateCarInfo(UUID carId, UpdateCarInfoForm car);
+    CarDTO updateCar(UUID carId, UpdateCarInfoForm car);
     List<CarDTO> deleteCarsByUserId(UUID id);
     CarDTO deleteCarById(UUID carId);
 }
