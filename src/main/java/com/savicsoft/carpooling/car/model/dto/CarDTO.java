@@ -1,7 +1,6 @@
 package com.savicsoft.carpooling.car.model.dto;
 
-import com.savicsoft.carpooling.car.enumeration.FuelType;
-import com.savicsoft.carpooling.user.model.entity.User;
+import com.savicsoft.carpooling.car.model.enumeration.FuelType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -1,8 +1,7 @@
 package com.savicsoft.carpooling.car.model.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.savicsoft.carpooling.car.enumeration.FuelType;
+import com.savicsoft.carpooling.car.model.enumeration.FuelType;
 import com.savicsoft.carpooling.user.model.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.checkerframework.common.aliasing.qual.Unique;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data

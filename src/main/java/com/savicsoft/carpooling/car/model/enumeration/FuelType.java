@@ -1,4 +1,4 @@
-package com.savicsoft.carpooling.car.enumeration;
+package com.savicsoft.carpooling.car.model.enumeration;
 
 import lombok.Getter;
 

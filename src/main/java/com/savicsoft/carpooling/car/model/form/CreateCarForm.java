@@ -1,6 +1,6 @@
 package com.savicsoft.carpooling.car.model.form;
 
-import com.savicsoft.carpooling.car.enumeration.FuelType;
+import com.savicsoft.carpooling.car.model.enumeration.FuelType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
