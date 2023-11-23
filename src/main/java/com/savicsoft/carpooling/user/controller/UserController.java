@@ -1,111 +1,244 @@
 package com.savicsoft.carpooling.user.controller;
 
-import com.google.cloud.storage.Blob;
-import com.savicsoft.carpooling.domain.ImageUploadForm;
-import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
-import com.savicsoft.carpooling.user.model.dto.CreateUserDTO;
+import com.savicsoft.carpooling.exception.CouldNotDeleteException;
+import com.savicsoft.carpooling.exception.errorinfo.ErrorInfo;
 import com.savicsoft.carpooling.user.model.dto.UserDTO;
+import com.savicsoft.carpooling.user.model.entity.UserPreferences;
+import com.savicsoft.carpooling.user.model.form.UpdateUserForm;
+import com.savicsoft.carpooling.user.model.form.UpdateUserPrefForm;
 import com.savicsoft.carpooling.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.UUID;
 
 
 @RequestMapping("/api/v1/users")
 @RestController
 @RequiredArgsConstructor
+@Tag(
+        name = "REST APIs for user",
+        description = "Operations to interact with user info"
+)
+
+
+// Security needs to be added later
 public class UserController {
 
-    private final UserService service;
-    private final GoogleCloudStorageService storageService;
+    private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getUsers(){
+    @Operation(
+            summary = "Receive user information",
+            description = "Retrieve user by id"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))
 
-        List<UserDTO> users = service.getAllUsers();
-        return ResponseEntity.ok(users);
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
 
-    }
-
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "HTTP Status: 400 -> User picture cannot be retrieved",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id){
-
-        UserDTO userDTO = service.getUserById(id);
-
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id){
+        UserDTO userDTO = userService.getUserById(id);
+        if(userService.getHasPictureById(id)){
+            MultipartFile picture = userService.downloadProfilePicture(id);
+            userDTO.setPicture(picture);
+        }
         return ResponseEntity.ok(userDTO);
-
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO userDTO){ //Receive a RequestBody with Form?
 
-        UserDTO createdUser = service.createUser(userDTO);
+    @Operation(
+            summary = "Delete user",
+            description = "Delete user by id"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
 
-        return ResponseEntity.ok(createdUser);
-    }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){ //Receive RequestBody with Form or DTO instead Long?
-
-        UserDTO updatedUser = service.updateUser(userDTO);
-
-        return ResponseEntity.ok(updatedUser);
-    }
-
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Could not delete the user",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
+    )
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id){
-
-        UserDTO deletedUser = service.deleteUser(id);
-
+    public ResponseEntity<Boolean> deleteUser(@PathVariable UUID id){
+        Boolean deletedUser = userService.deleteUser(id);
         return ResponseEntity.ok(deletedUser);
     }
 
-    /*@PostMapping("/{userUUID}/upload-profile-pic")
-    public ResponseEntity<HttpResponse> uploadProfilePicture(@PathVariable UUID userUUID, @RequestBody ImageUploadForm userImageForm) {
 
-        if (service.getUserByUuid(userUUID).getPictureUrl() != null) {
-            return ResponseEntity.badRequest().body(
-                    HttpResponse.builder()
-                            .timeStamp(LocalDateTime.now().toString())
-                            .data(Map.of("error", "Profile picture already exists."))
-                            .message("Profile picture already exists")
-                            .status(HttpStatus.BAD_REQUEST)
-                            .statusCode(HttpStatus.BAD_REQUEST.value())
-                            .build()
-            );
+    @Operation(
+            summary = "Upload user profile picture",
+            description = "Provide user id and file to upload profile picture to the storage"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MultipartFile.class))
+
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "HTTP Status: 400 -> Invalid data received",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User with provided id not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Could not upload the picture",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
+    )
+    @PostMapping(value = "/{id}/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MultipartFile> uploadProfilePicture(@PathVariable UUID id, @RequestParam MultipartFile picture) {
+        MultipartFile uploadedFile = userService.uploadProfilePicture(id, picture);
+        return ResponseEntity.ok(uploadedFile);
+    }
+
+
+    @Operation(
+            summary = "Delete user profile picture",
+            description = "Provide user id and filename to delete profile picture from the storage"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "HTTP Status: 400 -> Invalid data received",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> File not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Could not delete the picture",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
+    )
+    @DeleteMapping("/{id}/picture")
+    public ResponseEntity<Boolean> deleteProfilePicture(@PathVariable UUID id, @RequestParam String filename){
+        String[] parts = filename.split("/");
+        String idFile = parts[0];
+        if(!id.toString().equals(idFile)){
+            throw new CouldNotDeleteException("User doesn't have access to delete picture " + filename);
         }
-        try {
-            String fullFileName = userUUID.toString() + "/" + userImageForm.getFileName();
+        Boolean deleted = userService.deleteProfilePicture(id, filename);
+        return ResponseEntity.ok(deleted);
+    }
 
-            Blob uploadedPicture = storageService.uploadFile(userImageForm.getPicture(), fullFileName, userUUID);
-            service.getUserByUuid(userUUID).setPictureUrl("https://storage.googleapis.com/" + uploadedPicture.getName());
+    @Operation(
+            summary = "Update user information",
+            description = "Provide information specified in user form to update user info"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Could not update the user",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
+    )
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUserInfo(@PathVariable UUID id, UpdateUserForm userForm){
+        UserDTO updatedUser = userService.updateUserInfo(id, userForm);
+        return ResponseEntity.ok(updatedUser);
+    }
 
-            return ResponseEntity.ok(
-                    HttpResponse.builder()
-                            .timeStamp(LocalDateTime.now().toString())
-                            .data(Map.of("picture", uploadedPicture))
-                            .message("Profile picture uploaded successfully")
-                            .status(HttpStatus.OK)
-                            .statusCode(HttpStatus.OK.value())
-                            .build()
-            );
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(
-                            HttpResponse.builder()
-                                    .timeStamp(LocalDateTime.now().toString())
-                                    .data(Map.of("error", "Failed to upload profile picture: " + e.getMessage()))
-                                    .message("Failed to upload profile picture")
-                                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                                    .build()
-                    );
-        }
-    }*/
+
+    @Operation(
+            summary = "Update user preferences information",
+            description = "Provide information specified in user preferences form to update user preferences"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserPreferences.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User preferences not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Could not update the user preferences",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
+    )
+    @PatchMapping("/preferences/{prefId}")
+    public ResponseEntity<UserPreferences> updateUserPreferences(@PathVariable UUID prefId, UpdateUserPrefForm userPrefForm){
+            UserPreferences updatedPreferences = userService.updateUserPref(prefId,userPrefForm);
+            return ResponseEntity.ok(updatedPreferences);
+    }
+
+
 }
