@@ -1,11 +1,16 @@
 package com.savicsoft.carpooling.review.controller;
 
+import com.savicsoft.carpooling.exception.errorinfo.ErrorInfo;
 import com.savicsoft.carpooling.review.model.dto.ReviewDTO;
 import com.savicsoft.carpooling.review.model.form.CreateReviewForm;
 import com.savicsoft.carpooling.review.model.form.UpdateReviewForm;
 import com.savicsoft.carpooling.review.service.ReviewService;
+import com.savicsoft.carpooling.user.model.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +38,18 @@ public class ReviewController {
             summary = "Retrieve all reviews by User's id",
             description = "Retrieve all reviews that belong to User by his id"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status: 200 -> Success"
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
     )
     @GetMapping("/rated/{id}")
     public ResponseEntity<List<ReviewDTO>> getAllByRatedUserId(@PathVariable("id") UUID id) {
@@ -47,9 +61,18 @@ public class ReviewController {
             summary = "Retrieve all reviews by User's id",
             description = "Retrieve all reviews that User left by his id"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status: 200 -> Success"
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
     )
     @GetMapping("/rater/{id}")
     public ResponseEntity<List<ReviewDTO>> getAllRatingsLeftByUser(@PathVariable("id") UUID id){
@@ -61,9 +84,18 @@ public class ReviewController {
             summary = "Retrieve a Review by id",
             description = "Retrieve a Review by its id"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status: 200 -> Success"
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> Review not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
     )
     @GetMapping("/{id}")
     public ResponseEntity<ReviewDTO> getRatingById(@PathVariable("id") UUID id){
@@ -75,9 +107,23 @@ public class ReviewController {
             summary = "Create a Review",
             description = "Create a Review"
     )
-    @ApiResponse(
-            responseCode = "201",
-            description = "HTTP Status: 201 -> Created"
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "HTTP Status: 201 -> Created"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> User not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Review cannot be created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
     )
     @PostMapping
     public ResponseEntity<ReviewDTO> createReview(@RequestBody @Valid CreateReviewForm reviewToSave){
@@ -89,9 +135,23 @@ public class ReviewController {
             summary = "Update a Review",
             description = "Update a Review"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status: 200 -> Success"
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "HTTP Status: 404 -> Review not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Review cannot be updated",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
     )
     @PutMapping("/{id}")
     public ResponseEntity<ReviewDTO> updateReview(@PathVariable UUID id,
@@ -104,12 +164,21 @@ public class ReviewController {
             summary = "Delete a Review",
             description = "Delete a Review"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP Status: 200 -> Success"
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "HTTP Status: 200 -> Success"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "HTTP Status: 500 -> Review cannot be deleted",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+                    )
+            }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> createReview(@PathVariable UUID id){
+    public ResponseEntity<Boolean> deleteReview(@PathVariable UUID id){
         Boolean isDeleted = reviewService.delete(id);
         return ResponseEntity.ok(isDeleted);
     }

@@ -35,7 +35,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/cars")
 @RequiredArgsConstructor
 @Tag(
-        name = "CRUD REST APIs for user cars",
+        name = "Car resource",
         description = "Operations to interact user cars"
 )
 public class CarController {
