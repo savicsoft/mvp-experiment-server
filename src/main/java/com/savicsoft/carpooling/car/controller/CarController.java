@@ -1,12 +1,10 @@
 package com.savicsoft.carpooling.car.controller;
 
 import com.google.cloud.storage.Blob;
-import com.savicsoft.carpooling.car.forms.CreateCarForm;
-import com.savicsoft.carpooling.car.forms.UpdateCarInfoForm;
+import com.savicsoft.carpooling.car.model.form.CreateCarForm;
+import com.savicsoft.carpooling.car.model.form.UpdateCarInfoForm;
 import com.savicsoft.carpooling.car.model.dto.CarDTO;
 import com.savicsoft.carpooling.car.model.entity.Car;
-import com.savicsoft.carpooling.car.model.mapper.CarDTOMapper;
-import com.savicsoft.carpooling.car.model.mapper.CustomCarMapper;
 import com.savicsoft.carpooling.car.service.CarService;
 import com.savicsoft.carpooling.exception.CouldNotDeleteException;
 import com.savicsoft.carpooling.exception.CouldNotUpdateException;
