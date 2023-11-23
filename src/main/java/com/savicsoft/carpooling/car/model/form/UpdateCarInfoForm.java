@@ -1,6 +1,6 @@
 package com.savicsoft.carpooling.car.model.form;
 
-import com.savicsoft.carpooling.car.enumeration.FuelType;
+import com.savicsoft.carpooling.car.model.enumeration.FuelType;
 import lombok.Getter;
 import lombok.Setter;
 

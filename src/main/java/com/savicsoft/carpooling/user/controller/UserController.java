@@ -26,7 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Tag(
-        name = "REST APIs for user",
+        name = "User resource",
         description = "Operations to interact with user info"
 )
 

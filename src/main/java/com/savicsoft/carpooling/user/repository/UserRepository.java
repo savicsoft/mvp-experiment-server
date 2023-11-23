@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     void deleteById(UUID id);
     Optional<User> getUserByEmail(String email);
     Boolean existsByEmail(String email);
-    Boolean existsById(UUID id);
+    boolean existsById(UUID id);
 
 
 }

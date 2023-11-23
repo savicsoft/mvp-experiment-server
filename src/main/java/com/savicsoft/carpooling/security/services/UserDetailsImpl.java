@@ -11,12 +11,14 @@ import com.savicsoft.carpooling.user.model.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class UserDetailsImpl implements UserDetails {
     static final long serialVersionUID = 1L;
 
-    final Long id;
+    final UUID id;
 
     final String username;
 
@@ -35,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
