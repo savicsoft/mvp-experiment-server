@@ -65,6 +65,9 @@ public class AuthController {
         var user = User.builder()
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .firstName(signUpRequest.getFirstname())
+                .lastName(signUpRequest.getLastname())
+                .phoneNumber(signUpRequest.getPhoneNumber())
                 .userPreferences(preferences)
                 .build();
 

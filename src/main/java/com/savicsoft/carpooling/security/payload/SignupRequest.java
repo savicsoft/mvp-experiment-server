@@ -18,4 +18,10 @@ public class SignupRequest {
             message = "Password should contain at least 1 uppercase and 1 special Character")
     @Size(min = 6, message = "Password Must be at least 6 characters")
     final String password;
+    @NotBlank(message = "First name is required")
+    String firstname;
+    @NotBlank(message = "Last name is required")
+    String lastname;
+    @NotBlank(message = "Phone number is required")
+    String phoneNumber;
 }
