@@ -21,8 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/auth")
@@ -53,7 +51,6 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
-
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
@@ -66,16 +63,8 @@ public class AuthController {
                 .build();
         // Create new user's account
         var user = User.builder()
-                .id(UUID.randomUUID())
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                .firstName(signUpRequest.getFirstName())
-                .lastName(signUpRequest.getLastName())
-                .birthDate(signUpRequest.getBirthDate())
-                .country(signUpRequest.getCountry())
-                .city(signUpRequest.getCity())
-                .driver(!signUpRequest.getDriver())
-                .phoneNumber(signUpRequest.getTel())
                 .userPreferences(preferences)
                 .build();
 

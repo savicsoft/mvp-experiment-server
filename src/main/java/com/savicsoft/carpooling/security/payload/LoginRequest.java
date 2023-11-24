@@ -1,29 +1,15 @@
 package com.savicsoft.carpooling.security.payload;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class LoginRequest {
-    @NotNull
+    @NotNull(message = "Please enter a valid email")
     private String email;
 
-    @NotNull
+    @NotNull(message = "Please enter your password")
     private String password;
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email){
-        this.email = email;
-    }
 }

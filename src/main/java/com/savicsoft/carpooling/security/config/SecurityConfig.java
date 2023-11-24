@@ -44,8 +44,7 @@ import java.util.UUID;
 @EnableWebSecurity
 @EnableMethodSecurity
         (securedEnabled = true,
-jsr250Enabled = true,
-prePostEnabled = true)
+jsr250Enabled = true)
 @RequiredArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class SecurityConfig {
@@ -100,8 +99,7 @@ public class SecurityConfig {
                 .anonymous(Customizer.withDefaults())
                 .formLogin(fl-> fl.usernameParameter("email"))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/v1/auth/**",
-                                "/v3/api-docs/**",
+                        .requestMatchers("/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()
                         .requestMatchers("/login").permitAll()
