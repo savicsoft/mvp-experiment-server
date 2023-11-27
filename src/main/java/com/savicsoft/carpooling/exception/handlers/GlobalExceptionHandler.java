@@ -62,4 +62,15 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorInfo, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorInfo> handleUnauthorizedException(Exception e) {
+
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setMessage(e.getMessage());
+        errorInfo.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        errorInfo.setTimestamp(new Date().getTime());
+
+        return new ResponseEntity<>(errorInfo, HttpStatus.UNAUTHORIZED);
+    }
 }
