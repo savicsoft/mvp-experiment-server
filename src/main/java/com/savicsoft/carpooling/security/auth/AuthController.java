@@ -55,6 +55,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
         // Create default preferences for the user
+
         UserPreferences preferences = UserPreferences.builder()
                 .language("English")
                 .smoking("No smoking")
@@ -62,6 +63,7 @@ public class AuthController {
                 .music("No music")
                 .build();
         // Create new user's account
+        //Need to have password confirmation?
         var user = User.builder()
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
