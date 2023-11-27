@@ -52,7 +52,7 @@ public class CarController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             )
     })
-    @GetMapping("/{userId}")
+    @GetMapping("/all/{userId}")
     public ResponseEntity<List<CarDTO>> getAllUserCars(@PathVariable UUID userId) {
         List<CarDTO> cars = carService.getAllCarsOfUser(userId);
         return ResponseEntity.ok(cars);
@@ -74,7 +74,7 @@ public class CarController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             ),
             @ApiResponse(
-                    responseCode = "500",
+                    responseCode = "400",
                     description = "Car pictures cannot be retrieved",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             )
@@ -125,11 +125,6 @@ public class CarController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CarDTO.class))
             ),
             @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid or missing Authorization header",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "Car not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
@@ -161,8 +156,15 @@ public class CarController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid or missing Authorization header",
+                    description = "Invalid data received",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Maximum number of pictures reached",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -177,8 +179,8 @@ public class CarController {
     })
     @PostMapping(value = "/{carId}/pictures", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<MultipartFile>> uploadCarPictures(@RequestHeader("Authorization") String authorizationHeader,
-                                                    @PathVariable UUID carId,
-                                                    @RequestParam List<MultipartFile> pictures) {
+                                                                 @PathVariable UUID carId,
+                                                                 @RequestParam List<MultipartFile> pictures) {
 
         List<MultipartFile> uploadedPictures = carService.uploadPictures(authorizationHeader, carId, pictures);
         return ResponseEntity.ok(uploadedPictures);
@@ -196,8 +198,9 @@ public class CarController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid or missing Authorization header",
+                    description = "Invalid data received",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -212,8 +215,8 @@ public class CarController {
     })
     @DeleteMapping(value = "/{carId}/pictures")
     public ResponseEntity<Boolean> deleteCarPictures(@RequestHeader("Authorization") String authorizationHeader,
-                                                    @PathVariable UUID carId,
-                                                    @RequestParam("file names") List<String> fileNames) {
+                                                     @PathVariable UUID carId,
+                                                     @RequestParam("file names") List<String> fileNames) {
 
         Boolean deletedPictures = carService.deletePictures(authorizationHeader, carId, fileNames);
         return ResponseEntity.ok(deletedPictures);
@@ -228,11 +231,6 @@ public class CarController {
                     responseCode = "200",
                     description = "Cars deleted successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid or missing Authorization header",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             ),
             @ApiResponse(
                     responseCode = "500",
@@ -258,8 +256,8 @@ public class CarController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
             ),
             @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid or missing Authorization header",
+                    responseCode = "404",
+                    description = "Car not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             ),
             @ApiResponse(
@@ -270,7 +268,7 @@ public class CarController {
     })
     @DeleteMapping("/delete/{carId}")
     public ResponseEntity<Boolean> deleteCar(@RequestHeader("Authorization") String authorizationHeader,
-                                            @PathVariable UUID carId) {
+                                             @PathVariable UUID carId) {
 
         Boolean deletedCar = carService.deleteCarById(authorizationHeader, carId);
         return ResponseEntity.ok(deletedCar);

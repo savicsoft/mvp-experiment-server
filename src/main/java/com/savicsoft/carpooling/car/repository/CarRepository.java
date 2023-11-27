@@ -10,8 +10,8 @@ import java.util.UUID;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, UUID> {
-    Optional<List<Car>> findAllByUserId(UUID userId);
-    void deleteCarsByUserId(UUID userId);
-    void deleteCarById(UUID carId);
+    List<Car> findAllByUserId(UUID userId);
+    void deleteAllByUserId(UUID userId);
+    void deleteById(UUID carId);
     Optional<Car> findCarById(UUID carId);
 }

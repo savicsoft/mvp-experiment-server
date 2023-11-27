@@ -30,10 +30,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<CarDTO> getAllCarsOfUser(UUID userId) {
-        Optional<List<Car>> carsOptional = carRepository.findAllByUserId(userId);
-        if (carsOptional.isEmpty())
-            throw new NotFoundException("User does not exist for UUID: " + userId);
-        return CarDTOMapper.INSTANCE.mapToCarDTOList(carsOptional.get());
+        if (userRepository.findById(userId).isEmpty())
+            throw new NotFoundException("User " + userId + " does not exist");
+        List<Car> cars = carRepository.findAllByUserId(userId);
+        return CarDTOMapper.INSTANCE.mapToCarDTOList(cars);
     }
 
     @Override
@@ -41,11 +41,13 @@ public class CarServiceImpl implements CarService {
         Optional<Car> carOptional = carRepository.findCarById(id);
         if (carOptional.isEmpty())
             throw new NotFoundException("Car does not exist for UUID: " + id);
-        // Car pictures
         CarDTO carDTO = CarDTOMapper.INSTANCE.mapToCarDTO(carOptional.get());
-        UUID userId = carDTO.getUserId();
-        List<MultipartFile> pictures = storageService.downloadFiles(userId.toString() + "/" + id.toString());
-        carDTO.setPictures(pictures);
+        // Car pictures
+        if (carOptional.get().getNumOfPics() > 0) {
+            UUID userId = carDTO.getUserId();
+            List<MultipartFile> pictures = storageService.downloadFiles(userId.toString() + "/" + id.toString());
+            carDTO.setPictures(pictures);
+        }
         return carDTO;
     }
 
@@ -56,8 +58,8 @@ public class CarServiceImpl implements CarService {
 
         if (user.getCars() == null)
             user.setCars(new ArrayList<>());
+
         if (user.getCars().size() < 3) {
-            //Should this be checked: if (!user.isDriver())?
             Car newCar = Car.builder()
                     .mark(carForm.getMark())
                     .model(carForm.getModel())
@@ -88,7 +90,7 @@ public class CarServiceImpl implements CarService {
         }
         // Handle response if user already has 3 cars
         else {
-            throw new MaxCarsReachedException("User is only allowed to have 3 different cars");
+            throw new MaxReachedException("User is only allowed to have 3 different cars");
         }
     }
 
@@ -115,7 +117,7 @@ public class CarServiceImpl implements CarService {
             carRepository.save(existingCar);
             return CarDTOMapper.INSTANCE.mapToCarDTO(existingCar);
         } catch (DataAccessException e) {
-            throw new CouldNotUpdateException("Internal Error. Could not update the car. ", e);
+            throw new CouldNotUpdateException("Internal Error. Could not update the car.");
         }
     }
 
@@ -131,7 +133,7 @@ public class CarServiceImpl implements CarService {
 
         Car car = carOptional.get();
         if (car.getNumOfPics() + pictures.size() > 5)
-            throw new CouldNotUpdateException("Maximum number of pictures for this car reached");
+            throw new MaxReachedException("Maximum number of pictures for this car reached");
 
         // Handle the pictures upload
         for (MultipartFile picture : pictures) {
@@ -143,7 +145,7 @@ public class CarServiceImpl implements CarService {
             carRepository.save(car);
             return pictures;
         } catch (DataAccessException e) {
-            throw new CouldNotDeleteException("Internal Error. Could not update the car after uploading pictures.", e);
+            throw new CouldNotUpdateException("Internal Error. Could not update the car after uploading pictures.");
         }
     }
 
@@ -168,31 +170,40 @@ public class CarServiceImpl implements CarService {
             carRepository.save(car);
             return true;
         } catch (DataAccessException e) {
-            throw new CouldNotDeleteException("Internal Error. Could not update the car after deleting pictures.", e);
+            throw new CouldNotDeleteException("Internal Error. Could not update the car after deleting pictures.");
         }
     }
 
+    // TODO: NOT WORKING AS EXPECTED, NEEDS TO BE FIXED
     @Override
     public boolean deleteAllUserCars(String authorizationHeader) {
         User user = getAuthorizedUser(authorizationHeader);
         try {
-            carRepository.deleteCarsByUserId(user.getId());
+            List<Car> userCars = carRepository.findAllByUserId(user.getId());
+
+            for (Car car : userCars)
+                car.getUser().getCars().remove(car);
+
+            carRepository.deleteAllByUserId(user.getId());
             return carRepository.findAllByUserId(user.getId()).isEmpty();
         } catch (DataAccessException e) {
-            throw new CouldNotDeleteException("Internal Error. Could not delete cars. ", e);
+            throw new CouldNotDeleteException("Internal Error. Could not delete cars.");
         }
     }
 
     @Override
     public boolean deleteCarById(String authorizationHeader, UUID carId) {
+        Car car = carRepository.findCarById(carId)
+                .orElseThrow(() -> new NotFoundException("Car not found: " + carId));
         User user = getAuthorizedUser(authorizationHeader);
         if (!validateUserOwnership(user, carId))
             throw new CouldNotDeleteException("User does not own this car: " + carId);
         try {
-            carRepository.deleteCarById(carId);
+            car.getUser().getCars().remove(car);
+            carRepository.deleteById(carId);
             return carRepository.findCarById(carId).isEmpty();
         } catch (DataAccessException e) {
-            throw new CouldNotDeleteException("Internal Error. Could not delete a car. ", e);
+            throw new CouldNotDeleteException("Internal Error. Could not delete a car.");
         }
     }
 
