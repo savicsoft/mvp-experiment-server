@@ -52,8 +52,8 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MaxCarsReachedException.class)
-    public ResponseEntity<ErrorInfo> handleMaxCarsReachedException(Exception e) {
+    @ExceptionHandler(MaxReachedException.class)
+    public ResponseEntity<ErrorInfo> handleMaxReachedException(Exception e) {
 
         ErrorInfo errorInfo = new ErrorInfo();
         errorInfo.setMessage(e.getMessage());
