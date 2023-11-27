@@ -7,36 +7,21 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 @Data
 @RequiredArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class SignupRequest {
-
-    @NotNull
+    @NotBlank(message = "Email Address is needed")
     @Email
     final String email;
-
-    @NotNull
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$",
+            message = "Password should contain at least 1 uppercase and 1 special Character")
+    @Size(min = 6, message = "Password Must be at least 6 characters")
     final String password;
-
-    @NotNull
-    final String firstName;
-    @NotNull
-    final String lastName;
-
-    @NotNull
-    final String tel;
-
-    final LocalDate birthDate;
-
-    @NotNull
-    final String country;
-
-    @NotNull
-    final String city;
-
-    final Boolean driver;
-
+    @NotBlank(message = "First name is required")
+    String firstname;
+    @NotBlank(message = "Last name is required")
+    String lastname;
+    @NotBlank(message = "Phone number is required")
+    String phoneNumber;
 }
