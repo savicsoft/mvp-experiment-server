@@ -103,7 +103,7 @@ public class CarServiceImpl implements CarService {
         }
         Car existingCar = existingCarOptional.get();
         if (!validateUserOwnership(user, existingCar.getId()))
-            throw new CouldNotUpdateException("User does not own this car: " + carId);
+            throw new UnauthorizedException("User does not own this car: " + carId);
 
         existingCar.setMark(Optional.ofNullable(car.getMark()).orElse(existingCar.getMark()));
         existingCar.setModel(Optional.ofNullable(car.getModel()).orElse(existingCar.getModel()));
@@ -129,7 +129,7 @@ public class CarServiceImpl implements CarService {
 
         User user = getAuthorizedUser(authorizationHeader);
         if (!validateUserOwnership(user, carId))
-            throw new CouldNotUpdateException("User does not own this car: " + carId);
+            throw new UnauthorizedException("User does not own this car: " + carId);
 
         Car car = carOptional.get();
         if (car.getNumOfPics() + pictures.size() > 5)
@@ -157,7 +157,7 @@ public class CarServiceImpl implements CarService {
 
         User user = getAuthorizedUser(authorizationHeader);
         if (!validateUserOwnership(user, carId))
-            throw new CouldNotDeleteException("User does not own this car: " + carId);
+            throw new UnauthorizedException("User does not own this car: " + carId);
 
         Car car = carOptional.get();
         for (String fileName : fileNames) {
@@ -197,7 +197,7 @@ public class CarServiceImpl implements CarService {
                 .orElseThrow(() -> new NotFoundException("Car not found: " + carId));
         User user = getAuthorizedUser(authorizationHeader);
         if (!validateUserOwnership(user, carId))
-            throw new CouldNotDeleteException("User does not own this car: " + carId);
+            throw new UnauthorizedException("User does not own this car: " + carId);
         try {
             car.getUser().getCars().remove(car);
             carRepository.deleteById(carId);

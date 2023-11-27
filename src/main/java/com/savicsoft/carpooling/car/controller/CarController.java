@@ -125,6 +125,11 @@ public class CarController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CarDTO.class))
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized, user does not own a car",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "Car not found",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
@@ -159,6 +164,11 @@ public class CarController {
                     description = "Invalid data received",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
 
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized, user does not own a car",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             ),
             @ApiResponse(
                     responseCode = "403",
@@ -201,6 +211,11 @@ public class CarController {
                     description = "Invalid data received",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
 
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized, user does not own a car",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -254,6 +269,11 @@ public class CarController {
                     responseCode = "200",
                     description = "Car deleted successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized, user does not own a car",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
             ),
             @ApiResponse(
                     responseCode = "404",
