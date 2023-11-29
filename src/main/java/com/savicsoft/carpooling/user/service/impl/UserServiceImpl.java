@@ -85,10 +85,11 @@ public class UserServiceImpl implements UserService {
             throw new CouldNotDeleteException("Internal Error. Could not update the user");
         }
     }
+
     @Override
     public UserPreferences updateUserPref(UUID id, UpdateUserPrefForm userPrefForm) {
         Optional<UserPreferences> userPreferencesOptional = userPreferencesRepository.findById(id);
-        if(userPreferencesOptional.isEmpty()){
+        if (userPreferencesOptional.isEmpty()) {
             throw new NotFoundException("User preferences with UUID: " + id + " does not exist.");
         }
         try {
@@ -99,7 +100,7 @@ public class UserServiceImpl implements UserService {
             userPreferences.setMusic(Optional.ofNullable(userPrefForm.getMusic()).orElse(userPreferences.getMusic()));
             userPreferencesRepository.save(userPreferences);
             return userPreferences;
-        }catch (DataAccessException e){
+        } catch (DataAccessException e) {
             throw new CouldNotDeleteException("Internal Error. Could not update the user preferences");
         }
 
@@ -109,10 +110,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByEmail(String email) {
         Optional<User> userOptional = userRepository.getUserByEmail(email);
-        if(userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             throw new NotFoundException("User with email: " + email + " does not exist.");
         }
-        return  UserMapper.INSTANCE.userToUserDTO(userOptional.get());
+        return UserMapper.INSTANCE.userToUserDTO(userOptional.get());
     }
 
     @Override
@@ -130,14 +131,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteProfilePicture(UUID id, String fileName) {
         Optional<User> userOptional = userRepository.findById(id);
-        if(userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             throw new NotFoundException("User with UUID: " + id + " does not exist.");
         }
         boolean deleted = googleCloudStorageService.deleteFile(fileName);
-        if(deleted){
-                userOptional.get().setPicture(false);
-                userRepository.save(userOptional.get());
+        if (deleted) {
+            userOptional.get().setPicture(false);
+            userRepository.save(userOptional.get());
         }
         return deleted;
     }
+
+    @Override
+    public boolean verify(String verificationCode) {
+        User user = userRepository.findByVerificationCode(verificationCode);
+
+        if (user == null || user.isEnabled()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userRepository.save(user);
+
+            return true;
+        }
+
+    }
+
 }

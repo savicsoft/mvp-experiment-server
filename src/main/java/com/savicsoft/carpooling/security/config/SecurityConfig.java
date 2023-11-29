@@ -103,6 +103,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/api/auth/verify").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                         .requestMatchers("/api/auth/signup").anonymous()

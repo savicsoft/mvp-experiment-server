@@ -26,4 +26,5 @@ public interface UserService {
 
     Boolean getHasPictureById(UUID id);
 
+    boolean verify(String code);
 }

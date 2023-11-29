@@ -54,6 +54,13 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_preferences_id")
     private UserPreferences userPreferences;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
@@ -67,6 +74,9 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+
+    public Boolean getEnabled() { return enabled;}
 
     @Override
     public boolean isAccountNonExpired() {
@@ -85,6 +95,18 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(Object o) {
+        this.verificationCode = (String) o;
+    }
+
+    public void setEnabled(boolean b) {
+        this.enabled = b;
     }
 }
