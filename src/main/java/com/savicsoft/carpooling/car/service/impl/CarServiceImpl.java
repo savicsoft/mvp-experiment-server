@@ -77,7 +77,7 @@ public class CarServiceImpl implements CarService {
             if (carForm.getPictures() != null) {
                 for (MultipartFile picture : carForm.getPictures()) {
                     int existingPics = newCar.getNumOfPics();
-                    String fullFileName = user.getId().toString() + "/" + newCar.getId().toString() + "/" + picture.getName();
+                    String fullFileName = user.getId().toString() + "/" + newCar.getId().toString() + "/" + picture.getOriginalFilename();
                     Blob uploadedPicture = storageService.uploadFile(picture, fullFileName, newCar.getId());
                     newCar.setNumOfPics(existingPics++);
                 }
@@ -138,7 +138,7 @@ public class CarServiceImpl implements CarService {
 
         // Handle the pictures upload
         for (MultipartFile picture : pictures) {
-            String fullFileName = user.getId().toString() + "/" + carId.toString() + "/" + picture.getName();
+            String fullFileName = user.getId().toString() + "/" + carId.toString() + "/" + picture.getOriginalFilename();
             Blob uploadedPicture = storageService.uploadFile(picture, fullFileName, carId);
             car.setNumOfPics(car.getNumOfPics()+1);
         }
@@ -174,7 +174,7 @@ public class CarServiceImpl implements CarService {
             throw new CouldNotDeleteException("Internal Error. Could not update the car after deleting pictures.");
         }
     }
-    
+
     @Override
     @Transactional
     public boolean deleteAllUserCars(String authorizationHeader) {
