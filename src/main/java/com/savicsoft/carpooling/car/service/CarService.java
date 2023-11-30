@@ -17,7 +17,7 @@ public interface CarService {
     CarDTO getCarById(UUID uuid);
     CarDTO createCar(String authorizationHeader, CreateCarForm carForm);
     CarDTO updateCar(String authorizationHeader, UUID carId, UpdateCarInfoForm car);
-    List<MultipartFile> uploadPictures(String authorizationHeader, UUID carId, List<MultipartFile> pictures);
+    List<String> uploadPictures(String authorizationHeader, UUID carId, List<MultipartFile> pictures);
     boolean deletePictures(String authorizationHeader, UUID carId, List<String> fileNames);
     boolean deleteAllUserCars(String authorizationHeader);
     boolean deleteCarById(String authorizationHeader, UUID carId);

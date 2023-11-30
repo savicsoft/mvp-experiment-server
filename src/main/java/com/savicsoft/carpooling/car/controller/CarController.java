@@ -157,7 +157,7 @@ public class CarController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Car pictures uploaded successfully",
-                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = MultipartFile.class)))
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -188,11 +188,11 @@ public class CarController {
             )
     })
     @PostMapping(value = "/{carId}/pictures", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<MultipartFile>> uploadCarPictures(@RequestHeader("Authorization") String authorizationHeader,
+    public ResponseEntity<List<String>> uploadCarPictures(@RequestHeader("Authorization") String authorizationHeader,
                                                                  @PathVariable UUID carId,
                                                                  @RequestParam List<MultipartFile> pictures) {
 
-        List<MultipartFile> uploadedPictures = carService.uploadPictures(authorizationHeader, carId, pictures);
+        List<String> uploadedPictures = carService.uploadPictures(authorizationHeader, carId, pictures);
         return ResponseEntity.ok(uploadedPictures);
     }
 

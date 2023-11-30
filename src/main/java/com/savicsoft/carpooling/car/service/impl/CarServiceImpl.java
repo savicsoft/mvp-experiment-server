@@ -123,7 +123,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<MultipartFile> uploadPictures(String authorizationHeader, UUID carId, List<MultipartFile> pictures) {
+    public List<String> uploadPictures(String authorizationHeader, UUID carId, List<MultipartFile> pictures) {
         Optional<Car> carOptional = carRepository.findCarById(carId);
         if (carOptional.isEmpty())
             throw new NotFoundException("Car with UUID: " + carId + " does not exist.");
@@ -136,15 +136,16 @@ public class CarServiceImpl implements CarService {
         if (car.getNumOfPics() + pictures.size() > 5)
             throw new MaxReachedException("Maximum number of pictures for this car reached");
 
-        // Handle the pictures upload
+        List<String> picNames = new ArrayList<>();
         for (MultipartFile picture : pictures) {
             String fullFileName = user.getId().toString() + "/" + carId.toString() + "/" + picture.getOriginalFilename();
             Blob uploadedPicture = storageService.uploadFile(picture, fullFileName, carId);
             car.setNumOfPics(car.getNumOfPics()+1);
+            picNames.add(fullFileName);
         }
         try {
             carRepository.save(car);
-            return pictures;
+            return picNames;
         } catch (DataAccessException e) {
             throw new CouldNotUpdateException("Internal Error. Could not update the car after uploading pictures.");
         }
