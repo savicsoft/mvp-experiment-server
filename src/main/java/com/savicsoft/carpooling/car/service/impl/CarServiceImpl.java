@@ -13,6 +13,7 @@ import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageSer
 import com.savicsoft.carpooling.security.auth.JwtUtils;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -173,16 +174,16 @@ public class CarServiceImpl implements CarService {
             throw new CouldNotDeleteException("Internal Error. Could not update the car after deleting pictures.");
         }
     }
-
-    // TODO: NOT WORKING AS EXPECTED, NEEDS TO BE FIXED
+    
     @Override
+    @Transactional
     public boolean deleteAllUserCars(String authorizationHeader) {
         User user = getAuthorizedUser(authorizationHeader);
         try {
             List<Car> userCars = carRepository.findAllByUserId(user.getId());
 
             for (Car car : userCars)
-                car.getUser().getCars().remove(car);
+                user.getCars().remove(car);
 
             carRepository.deleteAllByUserId(user.getId());
             return carRepository.findAllByUserId(user.getId()).isEmpty();
