@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface CarRepository extends JpaRepository<Car, Long> {
-    Optional<List<Car>> findAllByUserId(UUID userId);
-    Optional<List<Car>> deleteCarsByUserId(UUID userId);
-    Optional<Car> deleteCarById(UUID carId);
+public interface CarRepository extends JpaRepository<Car, UUID> {
+    List<Car> findAllByUserId(UUID userId);
+    void deleteAllByUserId(UUID userId);
+    void deleteById(UUID carId);
     Optional<Car> findCarById(UUID carId);
 }
