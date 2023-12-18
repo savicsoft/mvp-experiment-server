@@ -40,6 +40,12 @@ dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
 	implementation 'org.flywaydb:flyway-core:9.22.0'
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+	implementation 'org.springframework.boot:spring-boot-starter-mail:3.2.0'
+	implementation 'com.github.lambdaexpression:request-body-param:2.0.3.RELEASE'
+	implementation 'com.github.lambdaexpression:request-body-param:2.0.3.RELEASE'
+	implementation 'com.github.lambdaexpression:request-body-param:2.0.3.RELEASE'
+	implementation 'com.github.lambdaexpression:request-body-param:2.0.3.RELEASE'
+	implementation 'com.github.lambdaexpression:request-body-param:2.0.3.RELEASE'
 
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 	runtimeOnly 'org.postgresql:postgresql'

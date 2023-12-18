@@ -27,13 +27,15 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     final String password;
 
+    final boolean enabled;
 
     public static UserDetailsImpl build(User user) {
 
         return new UserDetailsImpl(user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getPassword());
+                user.getPassword(),
+                user.getEnabled());
     }
 
 
@@ -60,6 +62,8 @@ public class UserDetailsImpl implements UserDetails {
         return username;
     }
 
+    public boolean getEnabled() {return  enabled;}
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -77,7 +81,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
-    }
+        return enabled;}
 
 }
