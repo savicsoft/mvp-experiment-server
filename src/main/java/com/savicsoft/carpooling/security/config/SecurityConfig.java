@@ -1,8 +1,6 @@
 package com.savicsoft.carpooling.security.config;
 
-import com.savicsoft.carpooling.security.auth.AuthEntryPointJwt;
 import com.savicsoft.carpooling.security.auth.AuthTokenFilter;
-import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,15 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -32,6 +27,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -49,8 +45,9 @@ jsr250Enabled = true)
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class SecurityConfig {
 
-    final UserDetailsServiceImpl userDetailsService;
-    final AuthEntryPointJwt unauthorizedHandler;
+    final AuthenticationEntryPoint authenticationEntryPoint;
+    final AuthenticationProvider authenticationProvider;
+    final AuthTokenFilter authTokenFilter;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     String googleClientId;
@@ -65,58 +62,31 @@ public class SecurityConfig {
     @Value("${spring.security.oauth2.client.registration.facebook.redirect-uri}")
     String facebookRedirectUri;
 
-
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-
-        return authProvider;
-    }
-    @Bean
-    public AuthenticationManager authenticationManager (AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder () {
-        return new BCryptPasswordEncoder();
-    }
-
-
     @Bean
     @Order(1)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
             throws Exception {
+        // todo configure oauth2 login
         http.csrf(csrf -> csrf.disable())
                 .anonymous(Customizer.withDefaults())
-                .formLogin(fl-> fl.usernameParameter("email"))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()
-                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/auth/verify").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/auth/signin").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                         .requestMatchers("/api/auth/signup").anonymous()
                         .anyRequest().authenticated()
                 )
-                .oauth2Login(Customizer.withDefaults())
-
-                .cors(cors-> cors.disable())
-                        .logout(l-> l.logoutSuccessUrl("/")
-                                .logoutUrl("/logout"));
-
-        http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(management ->
+                        management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.disable())
+                .logout(l -> l.logoutSuccessUrl("/")
+                        .logoutUrl("/logout"))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(authenticationEntryPoint));
 
         return http.build();
     }
