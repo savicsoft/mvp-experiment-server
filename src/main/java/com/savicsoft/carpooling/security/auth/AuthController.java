@@ -1,5 +1,6 @@
 package com.savicsoft.carpooling.security.auth;
 
+import com.savicsoft.carpooling.exception.DuplicateResourceException;
 import com.savicsoft.carpooling.security.payload.JwtResponse;
 import com.savicsoft.carpooling.security.payload.LoginRequest;
 import com.savicsoft.carpooling.security.payload.MessageResponse;
@@ -85,15 +86,15 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return ResponseEntity
-                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
+        return ResponseEntity.ok(
+                new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws MessagingException, UnsupportedEncodingException {
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            throw new DuplicateResourceException("Email Already in use");
         }
         // Create default preferences for the user
 

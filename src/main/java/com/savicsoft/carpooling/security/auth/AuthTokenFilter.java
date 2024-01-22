@@ -1,39 +1,40 @@
 package com.savicsoft.carpooling.security.auth;
-import java.io.IOException;
 
+import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.savicsoft.carpooling.security.services.UserDetailsServiceImpl;
+import java.io.IOException;
 
-
+@Component
 @FieldDefaults(level= AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
-     @Autowired
-     JwtUtils jwtUtils;
-     @Autowired
-     UserDetailsServiceImpl userDetailsService;
+     final JwtUtils jwtUtils;
+     final UserDetailsServiceImpl userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
-    // todo add spring validator
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
