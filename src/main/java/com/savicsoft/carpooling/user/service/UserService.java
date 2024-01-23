@@ -6,6 +6,7 @@ import com.savicsoft.carpooling.user.model.form.UpdateUserForm;
 import com.savicsoft.carpooling.user.model.form.UpdateUserPrefForm;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
@@ -17,6 +18,7 @@ public interface UserService {
     MultipartFile uploadProfilePicture(UUID id, MultipartFile picture);
 
     UserDTO updateUserInfo(UUID id, UpdateUserForm userForm);
+    UUID getUserPreferenceId(UUID userId);
 
     UserPreferences updateUserPref(UUID id, UpdateUserPrefForm userPrefForm);
 

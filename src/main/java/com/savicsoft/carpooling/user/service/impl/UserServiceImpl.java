@@ -65,6 +65,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UUID getUserPreferenceId(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return user.getUserPreferences().getId();
+    }
+
+    @Override
     public UserDTO updateUserInfo(UUID id, UpdateUserForm userForm) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
