@@ -35,7 +35,6 @@ public class CustomReviewMapper {
                 .comment(reviewForm.getComment())
                 .date(reviewForm.getDate())
                 .anonymous(reviewForm.isAnonymous())
-                .raterUser(userRepository.findById(reviewForm.getRaterUserId()).orElse(null))
                 .reviewType(reviewForm.getReviewType())
                 .build();
     }

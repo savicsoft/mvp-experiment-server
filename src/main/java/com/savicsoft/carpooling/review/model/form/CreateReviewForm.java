@@ -26,9 +26,6 @@ public class CreateReviewForm {
     private LocalDateTime date;
     @NotNull(message = "Status must be added")
     private boolean anonymous;
-    @Schema(description = "User that leaves the review")
-    @NotNull(message = "Rater user field must be filled appropriately")
-    private UUID raterUserId;
     @Schema(description = "Who left the review")
     private ReviewType reviewType;
 

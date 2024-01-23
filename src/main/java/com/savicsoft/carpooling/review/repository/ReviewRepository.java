@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findAllByRatedUser_Id(UUID userId);
-    List<Review> findAllByRaterUser_Id(UUID userId);
+    List<Review> findAllByRaterUser_Email(String email);
 
     Optional<Review> findById(UUID id);
     Long deleteById(UUID id);

@@ -93,4 +93,14 @@ public class GlobalExceptionHandler {
         errorInfo.setTimestamp(new Date());
         return new ResponseEntity<>(errorInfo, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorInfo> handleForbiddenException(ForbiddenException e){
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setMessage(e.getMessage());
+        errorInfo.setStatusCode(HttpStatus.FORBIDDEN.value());
+        errorInfo.setTimestamp(new Date());
+        return new ResponseEntity<>(errorInfo, HttpStatus.FORBIDDEN);
+    }
+
 }

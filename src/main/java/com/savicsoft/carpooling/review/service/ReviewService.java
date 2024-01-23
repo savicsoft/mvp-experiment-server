@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface ReviewService {
 
     List<ReviewDTO> findByRatedUserId(UUID ratedUserId);
-    List<ReviewDTO> findByRaterUserId(UUID raterUserId);
+    List<ReviewDTO> findByRaterUser();
     ReviewDTO findById(UUID id);
     ReviewDTO save(CreateReviewForm reviewToSave);
 

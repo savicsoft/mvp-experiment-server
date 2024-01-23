@@ -74,9 +74,9 @@ public class ReviewController {
                     )
             }
     )
-    @GetMapping("/rater/{id}")
-    public ResponseEntity<List<ReviewDTO>> getAllRatingsLeftByUser(@PathVariable("id") UUID id){
-        List<ReviewDTO> reviews = reviewService.findByRaterUserId(id);
+    @GetMapping("/rater")
+    public ResponseEntity<List<ReviewDTO>> getAllRatingsLeftByUser(){
+        List<ReviewDTO> reviews = reviewService.findByRaterUser();
         return ResponseEntity.ok(reviews);
    }
 
