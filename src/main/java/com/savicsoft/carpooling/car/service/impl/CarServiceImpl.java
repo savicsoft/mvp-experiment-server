@@ -10,6 +10,7 @@ import com.savicsoft.carpooling.car.repository.CarRepository;
 import com.savicsoft.carpooling.car.service.CarService;
 import com.savicsoft.carpooling.car.model.form.UpdateCarInfoForm;
 import com.savicsoft.carpooling.googlecloudstorage.service.GoogleCloudStorageService;
+import com.savicsoft.carpooling.security.auth.AuthUtil;
 import com.savicsoft.carpooling.security.auth.JwtUtils;
 import com.savicsoft.carpooling.user.model.entity.User;
 import com.savicsoft.carpooling.user.repository.UserRepository;
@@ -28,6 +29,7 @@ public class CarServiceImpl implements CarService {
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
     private final GoogleCloudStorageService storageService;
+    private final AuthUtil authUtil;
 
     @Override
     public List<CarDTO> getAllCarsOfUser(UUID userId) {
@@ -53,9 +55,9 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDTO createCar(String authorizationHeader, CreateCarForm carForm) {
+    public CarDTO createCar(CreateCarForm carForm) {
         //get user who requested this by jwt token and set the ownership to the same user
-        User user = getAuthorizedUser(authorizationHeader);
+        User user = getAuthorizedUser();
 
         if (user.getCars() == null)
             user.setCars(new ArrayList<>());
@@ -96,8 +98,8 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDTO updateCar(String authorizationHeader, UUID carId, UpdateCarInfoForm car) {
-        User user = getAuthorizedUser(authorizationHeader);
+    public CarDTO updateCar(UUID carId, UpdateCarInfoForm car) {
+        User user = getAuthorizedUser();
         Optional<Car> existingCarOptional = carRepository.findCarById(carId);
         if (existingCarOptional.isEmpty()) {
             throw new NotFoundException("Car does not exist for UUID: " + carId);
@@ -123,12 +125,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<String> uploadPictures(String authorizationHeader, UUID carId, List<MultipartFile> pictures) {
+    public List<String> uploadPictures(UUID carId, List<MultipartFile> pictures) {
         Optional<Car> carOptional = carRepository.findCarById(carId);
         if (carOptional.isEmpty())
             throw new NotFoundException("Car with UUID: " + carId + " does not exist.");
 
-        User user = getAuthorizedUser(authorizationHeader);
+        User user = getAuthorizedUser();
         if (!validateUserOwnership(user, carId))
             throw new UnauthorizedException("User does not own this car: " + carId);
 
@@ -152,12 +154,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public boolean deletePictures(String authorizationHeader, UUID carId, List<String> fileNames) {
+    public boolean deletePictures(UUID carId, List<String> fileNames) {
         Optional<Car> carOptional = carRepository.findCarById(carId);
         if (carOptional.isEmpty())
             throw new NotFoundException("Car with UUID: " + carId + " does not exist.");
 
-        User user = getAuthorizedUser(authorizationHeader);
+        User user = getAuthorizedUser();
         if (!validateUserOwnership(user, carId))
             throw new UnauthorizedException("User does not own this car: " + carId);
 
@@ -178,8 +180,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public boolean deleteAllUserCars(String authorizationHeader) {
-        User user = getAuthorizedUser(authorizationHeader);
+    public boolean deleteAllUserCars() {
+        User user = getAuthorizedUser();
         try {
             List<Car> userCars = carRepository.findAllByUserId(user.getId());
 
@@ -194,10 +196,10 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public boolean deleteCarById(String authorizationHeader, UUID carId) {
+    public boolean deleteCarById(UUID carId) {
         Car car = carRepository.findCarById(carId)
                 .orElseThrow(() -> new NotFoundException("Car not found: " + carId));
-        User user = getAuthorizedUser(authorizationHeader);
+        User user = getAuthorizedUser();
         if (!validateUserOwnership(user, carId))
             throw new UnauthorizedException("User does not own this car: " + carId);
         try {
@@ -209,15 +211,14 @@ public class CarServiceImpl implements CarService {
         }
     }
 
-    private User getAuthorizedUser(String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Authorization Header must start with 'Bearer'");
-        }
-        String jwtToken = authorizationHeader.substring(7);
-        String userEmail = jwtUtils.getUserNameFromJwtToken(jwtToken);
-        Optional<User> user = userRepository.getUserByEmail(userEmail);
+    private User getAuthorizedUser() {
+        String username = authUtil.getNameFromContext();
+        Optional<User> user = userRepository.getUserByEmail(username);
+
+        // Is this check necessary? Is it possible that email extracted from token does not exist?
         if (user.isEmpty())
-            throw new NotFoundException("Username does not exist: " + userEmail);
+            throw new NotFoundException("Username does not exist: " + username);
+
         return user.get();
     }
 
