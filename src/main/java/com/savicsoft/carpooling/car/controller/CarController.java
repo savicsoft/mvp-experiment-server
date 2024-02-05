@@ -110,7 +110,7 @@ public class CarController {
     public ResponseEntity<CarDTO> createCar(@RequestHeader("Authorization") String authorizationHeader,
                                             @Valid CreateCarForm carForm) {
 
-        CarDTO newCarDTO = carService.createCar(authorizationHeader, carForm);
+        CarDTO newCarDTO = carService.createCar(carForm);
         return new ResponseEntity<>(newCarDTO, HttpStatus.CREATED);
     }
 
@@ -141,11 +141,10 @@ public class CarController {
             )
     })
     @PatchMapping("/updateInfo/{carId}")
-    public ResponseEntity<CarDTO> updateCarInfo(@RequestHeader("Authorization") String authorizationHeader,
-                                                @PathVariable UUID carId,
+    public ResponseEntity<CarDTO> updateCarInfo(@PathVariable UUID carId,
                                                 UpdateCarInfoForm car){
 
-        CarDTO updatedCar = carService.updateCar(authorizationHeader, carId, car);
+        CarDTO updatedCar = carService.updateCar(carId, car);
         return ResponseEntity.ok(updatedCar);
     }
 
@@ -188,11 +187,10 @@ public class CarController {
             )
     })
     @PostMapping(value = "/{carId}/pictures", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<String>> uploadCarPictures(@RequestHeader("Authorization") String authorizationHeader,
-                                                                 @PathVariable UUID carId,
-                                                                 @RequestParam List<MultipartFile> pictures) {
+    public ResponseEntity<List<String>> uploadCarPictures(@PathVariable UUID carId,
+                                                          @RequestParam List<MultipartFile> pictures) {
 
-        List<String> uploadedPictures = carService.uploadPictures(authorizationHeader, carId, pictures);
+        List<String> uploadedPictures = carService.uploadPictures(carId, pictures);
         return ResponseEntity.ok(uploadedPictures);
     }
 
@@ -229,11 +227,10 @@ public class CarController {
             )
     })
     @DeleteMapping(value = "/{carId}/pictures")
-    public ResponseEntity<Boolean> deleteCarPictures(@RequestHeader("Authorization") String authorizationHeader,
-                                                     @PathVariable UUID carId,
+    public ResponseEntity<Boolean> deleteCarPictures(@PathVariable UUID carId,
                                                      @RequestParam("file names") List<String> fileNames) {
 
-        Boolean deletedPictures = carService.deletePictures(authorizationHeader, carId, fileNames);
+        Boolean deletedPictures = carService.deletePictures(carId, fileNames);
         return ResponseEntity.ok(deletedPictures);
     }
 
@@ -254,9 +251,9 @@ public class CarController {
             )
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteCars(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<Boolean> deleteCars() {
 
-        Boolean deletedCars = carService.deleteAllUserCars(authorizationHeader);
+        Boolean deletedCars = carService.deleteAllUserCars();
         return ResponseEntity.ok(deletedCars);
     }
 
@@ -287,10 +284,9 @@ public class CarController {
             )
     })
     @DeleteMapping("/delete/{carId}")
-    public ResponseEntity<Boolean> deleteCar(@RequestHeader("Authorization") String authorizationHeader,
-                                             @PathVariable UUID carId) {
+    public ResponseEntity<Boolean> deleteCar(@PathVariable UUID carId) {
 
-        Boolean deletedCar = carService.deleteCarById(authorizationHeader, carId);
+        Boolean deletedCar = carService.deleteCarById(carId);
         return ResponseEntity.ok(deletedCar);
     }
 }

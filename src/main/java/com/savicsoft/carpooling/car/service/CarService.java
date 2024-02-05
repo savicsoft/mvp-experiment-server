@@ -15,10 +15,10 @@ import java.util.UUID;
 public interface CarService {
     List<CarDTO> getAllCarsOfUser(UUID uuid);
     CarDTO getCarById(UUID uuid);
-    CarDTO createCar(String authorizationHeader, CreateCarForm carForm);
-    CarDTO updateCar(String authorizationHeader, UUID carId, UpdateCarInfoForm car);
-    List<String> uploadPictures(String authorizationHeader, UUID carId, List<MultipartFile> pictures);
-    boolean deletePictures(String authorizationHeader, UUID carId, List<String> fileNames);
-    boolean deleteAllUserCars(String authorizationHeader);
-    boolean deleteCarById(String authorizationHeader, UUID carId);
+    CarDTO createCar(CreateCarForm carForm);
+    CarDTO updateCar(UUID carId, UpdateCarInfoForm car);
+    List<String> uploadPictures(UUID carId, List<MultipartFile> pictures);
+    boolean deletePictures(UUID carId, List<String> fileNames);
+    boolean deleteAllUserCars();
+    boolean deleteCarById(UUID carId);
 }
