@@ -2,6 +2,7 @@ package com.savicsoft.carpooling.user.controller;
 
 import com.savicsoft.carpooling.exception.CouldNotDeleteException;
 import com.savicsoft.carpooling.exception.errorinfo.ErrorInfo;
+import com.savicsoft.carpooling.security.auth.AuthUtil;
 import com.savicsoft.carpooling.user.model.dto.UserDTO;
 import com.savicsoft.carpooling.user.model.entity.UserPreferences;
 import com.savicsoft.carpooling.user.model.form.UpdateUserForm;
@@ -35,10 +36,11 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final AuthUtil authUtil;
 
     @Operation(
             summary = "Receive user information",
-            description = "Retrieve user by id"
+            description = "Retrieve authenticated user"
     )
     @ApiResponses(
             value = {
@@ -61,8 +63,9 @@ public class UserController {
                     )
             }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id){
+    @GetMapping("/getUser")
+    public ResponseEntity<UserDTO> getUserById(){
+        UUID id = authUtil.getIdFromContext();
         UserDTO userDTO = userService.getUserById(id);
         if(userService.getHasPictureById(id)){
             MultipartFile picture = userService.downloadProfilePicture(id);
@@ -71,10 +74,9 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-
     @Operation(
             summary = "Delete user",
-            description = "Delete user by id"
+            description = "Delete authenticated user"
     )
     @ApiResponses(
             value = {
@@ -97,16 +99,16 @@ public class UserController {
                     )
             }
     )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable UUID id){
+    @DeleteMapping()
+    public ResponseEntity<Boolean> deleteUser(){
+        UUID id = authUtil.getIdFromContext();
         Boolean deletedUser = userService.deleteUser(id);
         return ResponseEntity.ok(deletedUser);
     }
 
-
     @Operation(
             summary = "Upload user profile picture",
-            description = "Provide user id and file to upload profile picture to the storage"
+            description = "Provide authenticated user file to upload profile picture to the storage"
     )
     @ApiResponses(
             value = {
@@ -124,7 +126,7 @@ public class UserController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "HTTP Status: 404 -> User with provided id not found",
+                            description = "HTTP Status: 404 -> User with id not found",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorInfo.class))
 
                     ),
@@ -135,16 +137,16 @@ public class UserController {
                     )
             }
     )
-    @PostMapping(value = "/{id}/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MultipartFile> uploadProfilePicture(@PathVariable UUID id, @RequestParam MultipartFile picture) {
+    @PostMapping(value = "/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MultipartFile> uploadProfilePicture(@RequestParam MultipartFile picture) {
+        UUID id = authUtil.getIdFromContext();
         MultipartFile uploadedFile = userService.uploadProfilePicture(id, picture);
         return ResponseEntity.ok(uploadedFile);
     }
 
-
     @Operation(
             summary = "Delete user profile picture",
-            description = "Provide user id and filename to delete profile picture from the storage"
+            description = "Provide authenticated user filename to delete profile picture from the storage"
     )
     @ApiResponses(
             value = {
@@ -170,10 +172,11 @@ public class UserController {
                     )
             }
     )
-    @DeleteMapping("/{id}/picture")
-    public ResponseEntity<Boolean> deleteProfilePicture(@PathVariable UUID id, @RequestParam String filename){
+    @DeleteMapping("/picture")
+    public ResponseEntity<Boolean> deleteProfilePicture(@RequestParam String filename){
         String[] parts = filename.split("/");
         String idFile = parts[0];
+        UUID id = authUtil.getIdFromContext();
         if(!id.toString().equals(idFile)){
             throw new CouldNotDeleteException("User doesn't have access to delete picture " + filename);
         }
@@ -204,12 +207,12 @@ public class UserController {
                     )
             }
     )
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUserInfo(@PathVariable UUID id, UpdateUserForm userForm){
+    @PatchMapping()
+    public ResponseEntity<UserDTO> updateUserInfo(@RequestBody UpdateUserForm userForm){
+        UUID id = authUtil.getIdFromContext();
         UserDTO updatedUser = userService.updateUserInfo(id, userForm);
         return ResponseEntity.ok(updatedUser);
     }
-
 
     @Operation(
             summary = "Update user preferences information",
@@ -234,11 +237,11 @@ public class UserController {
                     )
             }
     )
-    @PatchMapping("/preferences/{prefId}")
-    public ResponseEntity<UserPreferences> updateUserPreferences(@PathVariable UUID prefId, UpdateUserPrefForm userPrefForm){
-            UserPreferences updatedPreferences = userService.updateUserPref(prefId,userPrefForm);
-            return ResponseEntity.ok(updatedPreferences);
+    @PatchMapping("/preferences")
+    public ResponseEntity<UserPreferences> updateUserPreferences(@RequestBody UpdateUserPrefForm userPrefForm){
+        UUID userId = authUtil.getIdFromContext();
+        UUID prefId = userService.getUserPreferenceId(userId);
+        UserPreferences updatedPreferences = userService.updateUserPref(prefId,userPrefForm);
+        return ResponseEntity.ok(updatedPreferences);
     }
-
-
 }
